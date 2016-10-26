@@ -2,147 +2,198 @@
 //
 
 #include "stdafx.h"
-#include <vector>
-#include <string>
-#include <cstdint>
-#include <assert.h>
-#include <stdio.h>
-#include <time.h> 
-#include "Core\CoreTypes.h"
-#include "Core\Memory\MemoryManager.h"
-#include "Core\Memory\Allocator.h"
+#include <Windows.h>
+#include <d3d11.h>
+#include "Game.h"
 
-template<sInt32 Size>
-class FixedString
+
+// Global Variables:
+
+// current instance
+HINSTANCE hInst;
+
+// Forward declarations of functions included in this code module:
+ATOM				MyRegisterClass(HINSTANCE hInstance);
+BOOL				InitInstance(HINSTANCE, int);
+LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
+
+int APIENTRY WinMain(_In_ HINSTANCE	hInstance,_In_opt_ HINSTANCE hPrevInstance,_In_ LPSTR lpCmdLine,_In_ int nCmdShow)
 {
-public:
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
 
-	FixedString<Size>()
+	Game& lGame = Game::GetInstance();
+
+	// Initialize global strings
+	MyRegisterClass(hInstance);
+
+	// Perform application initialization:
+	if (!InitInstance(hInstance, nCmdShow))
+		return FALSE;
+
+	// If the app can't start, exit
+	if (!lGame.Construct())
 	{
-		lString[0] = 0x0;
+		return FALSE;
 	}
 
-	FixedString<Size>(const sChar* arg)
+	// Main message loop:
+	MSG msg;
+	memset(&msg, 0, sizeof(MSG));
+	while (msg.message != WM_QUIT ||lGame.ShouldFinishGame()) 
 	{
-		strncpy_s(lString, arg, Size);
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		lGame.Update();
+		lGame.Render();
 	}
 
-	template<sInt32 S>
-	FixedString<Size>(const FixedString<S>& arg)
-	{
-		assert(S <= Size);
-		strncpy_s(lString, arg.lString, Size);
-	}
-
-	template<sInt32 S>
-	FixedString<Size>(const FixedString<S>&& arg)
-	{
-		assert(S <= Size);
-		strncpy_s(lString, arg.lString, Size);
-	}
-
-	sChar*
-	GetString()
-	{
-		return lString;
-	}
-
-	FixedString<Size>& operator=(const sChar* arg)
-	{
-		strncpy_s(lString, arg, Size);
-		return *this;
-	}
-
-	template<sInt32 S>
-	FixedString<Size>& operator=(const FixedString<S>& arg)
-	{
-		assert(S <= Size);
-		strncpy_s(lString, arg.lString, Size);
-		return *this;
-	}
-
-	template<sInt32 S>
-	FixedString<Size>& operator=(const FixedString<S>&& arg)
-	{
-		assert(S <= Size);
-		strncpy_s(lString, arg.lString, Size);
-		return *this;
-	}
-
-	sChar lString[Size];
-};
-
-typedef FixedString<32> String32;
-typedef FixedString<64> String64;
-typedef FixedString<128> String128;
-
-String128 TestFunction(const String64& lTest)
-{	
-	return String128(lTest);
+	lGame.Release();
+	return (int)msg.wParam;
 }
 
-void nada()
+
+//
+//  FUNCTION: MyRegisterClass()
+//
+//  PURPOSE: Registers the window class.
+//
+ATOM
+MyRegisterClass(
+	HINSTANCE hInstance )
 {
-	int a = 2;
+	WNDCLASSEX wcex;
+
+	wcex.cbSize = sizeof(WNDCLASSEX);
+
+	wcex.style = CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc = WndProc;
+	wcex.cbClsExtra = 0;
+	wcex.cbWndExtra = 0;
+	wcex.hInstance = hInstance;
+	wcex.hIcon = NULL;// LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);;
+	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.lpszMenuName = 0; // MAKEINTRESOURCE(IDC_ENGINE);
+	wcex.lpszClassName = L"Lithium";
+	wcex.hIconSm = 0; // LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
+
+	return RegisterClassEx(&wcex);
 }
 
-int main()
+//
+//   FUNCTION: InitInstance(HINSTANCE, int)
+//
+//   PURPOSE: Saves instance handle and creates main window
+//
+//   COMMENTS:
+//
+//        In this function, we save the instance handle in a global variable and
+//        create and display the main program window.
+//
+BOOL 
+InitInstance(
+	HINSTANCE	hInstance, 
+	int			nCmdShow)
 {
-	/*String64 a;
-	String128 b;
+	HWND hWnd;
 
-	a = "asdasd";
-	b = "asdb";
-
-	b = a;
-
-	String64* g = new String64("ghghgh");
-
-	String128 as = TestFunction(a);
-
-	std::vector < sInt32, STDAllocator<sInt32>> lVector;
-
-	lVector.push_back(2);
+	hInst = hInstance; // Store instance handle in our global variable
 	
-	int asd = 2;*/
-	//sFloat64 timeDiff;
+	// Define the client area
+	RECT rc = { 0, 0, 800, 600 };
 
-	void* p = new void*();
+	// We need to tell windows the size of the full windows, including border
+	// so the rect is bigger
+	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
-	LinearAllocator lAlloc(sizeof(sFloat32) * 10000000, p);	
+	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
+	int width = rc.right - rc.left;
+	int height = rc.bottom - rc.top;
 
-	clock_t timer1 = clock();
-
-	for (int i = 0; i < 10000000; i++)
+	if (FALSE)
 	{
-		sFloat32* f = custom_allocator::AllocateNew<sFloat32>(lAlloc);
+		//Initializando parametros de ventana a Fullscreen
+		DEVMODE screen;
+		DWORD dwExStyle;
+		dwStyle = WS_OVERLAPPED | WS_POPUP;
+		memset(&screen, 0, sizeof(screen));
+		screen.dmSize = sizeof(screen);
+		screen.dmPelsWidth = rc.right - rc.left;
+		screen.dmPelsHeight = rc.bottom - rc.top;
+		screen.dmBitsPerPel = 32;
+		height = (int)GetSystemMetrics(SM_CYSCREEN);
+		width = (int)GetSystemMetrics(SM_CXSCREEN);
+		screen.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+		if (ChangeDisplaySettings(&screen, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) 
+		{
+			dwExStyle = 0; // <-- YOU DON'T NEED AN EXTENDED STYLE WHEN IN FULLSCREEN      
+			ShowCursor(TRUE);
+		}
 	}
 
-	int c = 90000000;
+	// Create the actual window
 
-	int &k = c;
+	hWnd = CreateWindowEx(
+		WS_EX_ACCEPTFILES
+		, L"Lithium"
+		, L"Lithium"
+		, dwStyle
+		, CW_USEDEFAULT, CW_USEDEFAULT		// Position
+		, width				// Width
+		, height			    // Height
+		, NULL, NULL
+		, hInstance
+		, NULL);
 
-	nada();
-	
-	int* a = new int[c];
+	if (!hWnd)
+		return FALSE;
 
+	Game::GetInstance().mRenderManager.hWnd = hWnd;
 
-	clock_t timer2 = clock();
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
 
-	for (sInt32 i = 0; i < 10000000; i++)
-	{
-		sFloat32* f2 = (sFloat32*)malloc(sizeof(sFloat32));
-	}
-
-	clock_t timer3 = clock();
-
-
-	sFloat64 time1 = timer2 - timer1;
-	sFloat64 time2 = timer3 - timer2;
-
-	printf("Allocator: %.f\n", time1);
-	printf("Malloc: %.f\n", time2);
-
-    return 0;
+	return TRUE;
 }
 
+//
+//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
+//
+//  PURPOSE:  Processes messages for the main window.
+//
+//  WM_COMMAND	- process the application menu
+//  WM_PAINT	- Paint the main window
+//  WM_DESTROY	- post a quit message and return
+//
+//
+LRESULT CALLBACK 
+WndProc(
+	HWND	hWnd, 
+	UINT	message, 
+	WPARAM	wParam, 
+	LPARAM	lParam )
+{
+	PAINTSTRUCT ps;
+	HDC hdc;
+
+	switch (message)
+	{
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+		//SetCursor(NULL);
+		EndPaint(hWnd, &ps);
+		break;
+	case WM_CLOSE:
+		DestroyWindow(hWnd);
+		break;
+
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}

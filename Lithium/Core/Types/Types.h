@@ -5,7 +5,10 @@
 
 typedef char sChar32;
 
-typedef bool               sBool;
+#define	TRUE			   1
+#define	FALSE			   0
+
+typedef int				   sBool;
 
 typedef char               sChar;
 

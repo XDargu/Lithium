@@ -2,7 +2,6 @@
 #define _ALLOCATOR_H
 
 #include "stdafx.h"
-#include "Core\Types.h"
 
 class Allocator
 {

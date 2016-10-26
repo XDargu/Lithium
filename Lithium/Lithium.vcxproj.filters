@@ -7,6 +7,15 @@
     <Filter Include="Core\Memory">
       <UniqueIdentifier>{547f8a3e-5f19-40bf-9659-3746ceed649b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Types">
+      <UniqueIdentifier>{4991d312-5c4e-435f-a36d-95ce0895efbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphics">
+      <UniqueIdentifier>{bcd75f1c-54d1-44c7-8e69-8db24a4e45ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Util">
+      <UniqueIdentifier>{b812f6cf-8730-4af0-99f4-481af8837b13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -20,12 +29,20 @@
     </ClInclude>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Core\Types.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\CoreTypes.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Types\Types.h">
+      <Filter>Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Types\FixedString.h">
+      <Filter>Core\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Core\Graphics\RenderManager.h">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Util\Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
@@ -33,5 +50,9 @@
     </ClCompile>
     <ClCompile Include="Lithium.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Core\Graphics\RenderManager.cpp">
+      <Filter>Core\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
