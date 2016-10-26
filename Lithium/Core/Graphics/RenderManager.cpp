@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include <d3dx11.h>
 #include "RenderManager.h"
 #include "Core\Util\Util.h"
 
@@ -154,5 +153,5 @@ RenderManager::Release()
 	d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_SUMMARY | D3D11_RLDO_DETAIL);
 	SAFE_RELEASE(d3dDebug);
 #endif
-	SAFE_RELEASE(device); // ¿Por qué falla?
+	SAFE_RELEASE(device);
 }

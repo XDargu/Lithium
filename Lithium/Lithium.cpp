@@ -3,7 +3,12 @@
 
 #include "stdafx.h"
 #include <Windows.h>
+
+#pragma warning( push )
+#pragma warning( disable: 4005 )
 #include <d3d11.h>
+#pragma warning( pop )
+
 #include "Game.h"
 
 
@@ -139,16 +144,16 @@ InitInstance(
 	// Create the actual window
 
 	hWnd = CreateWindowEx(
-		WS_EX_ACCEPTFILES
-		, L"Lithium"
-		, L"Lithium"
-		, dwStyle
-		, CW_USEDEFAULT, CW_USEDEFAULT		// Position
-		, width				// Width
-		, height			    // Height
-		, NULL, NULL
-		, hInstance
-		, NULL);
+        WS_EX_ACCEPTFILES
+        , L"Lithium"
+        , L"Lithium"
+        , dwStyle
+        , CW_USEDEFAULT, CW_USEDEFAULT		// Position
+        , width				// Width
+        , height			    // Height
+        , NULL, NULL
+        , hInstance
+        , NULL);
 
 	if (!hWnd)
 		return FALSE;

@@ -2,8 +2,12 @@
 #define _RENDER_MANAGER_H_
 
 // Includes
+#pragma warning( push )
+#pragma warning( disable: 4005 )
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#pragma warning( pop )
+
 
 // Compilation defines
 #define SET_RENDER_DEBUG_NAME(obj,name) (obj)->SetPrivateData(WKPDID_D3DDebugObjectName, (UINT) strlen( name ), name );
@@ -11,6 +15,7 @@
 // Forward declarations
 
 // Classes
+
 class RenderManager 
 {
 public:
