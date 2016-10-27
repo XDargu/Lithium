@@ -36,6 +36,17 @@ public:
 		return lString;
 	}
 
+    const sChar8*
+    GetString() const
+    {
+        return lString;
+    }
+
+    operator sChar8*() const
+    {
+        return GetString();
+    }
+
 	FixedString<Size>& operator=(const sChar8* arg)
 	{
 		strncpy_s(lString, arg, Size);
@@ -64,5 +75,9 @@ public:
 typedef FixedString<32> String32;
 typedef FixedString<64> String64;
 typedef FixedString<128> String128;
+
+typedef const String32&        String32Arg;
+typedef const String64&        String64Arg;
+typedef const String128&       String128Arg;
 
 #endif

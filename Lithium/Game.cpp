@@ -1,5 +1,8 @@
 #include "stdafx.h"
+
 #include "Game.h"
+#include "Core/Graphics/Shaders/Shader.h"
+
 #pragma warning( push )
 #pragma warning( disable: 4838 )
 #include <xnamath.h>
@@ -7,10 +10,11 @@
 
 static Game gGame;
 
-ID3D11VertexShader*     g_pVertexShader = NULL;
-ID3D11PixelShader*      g_pPixelShader = NULL;
-ID3D11InputLayout*      g_pVertexLayout = NULL;
+PixelShader     lPixelShader;
+VertexShader    lVertexShader;
+
 ID3D11Buffer*           g_pVertexBuffer = NULL;
+
 
 struct SimpleVertex
 {
@@ -27,46 +31,10 @@ Game::Construct()
 {
     sBool lbSuccess = mRenderManager.Construct();
 
-    // Compile the vertex shader
-    ID3DBlob* pVSBlob = NULL;
-    mRenderManager.CompileShaderFromFile("Tutorial07.fx", "VS", "vs_4_0", &pVSBlob);
+    ID3DBlob* lpVSBlob = NULL;
 
-
-    // Create the vertex shader
-    HRESULT hr = mRenderManager.device->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &g_pVertexShader);
-    if (FAILED(hr))
-    {
-        pVSBlob->Release();
-        return hr;
-    }
-
-    // Define the input layout
-    D3D11_INPUT_ELEMENT_DESC layout[] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
-    UINT numElements = ARRAYSIZE(layout);
-
-    // Create the input layout
-    hr = mRenderManager.device->CreateInputLayout(layout, numElements, pVSBlob->GetBufferPointer(),
-        pVSBlob->GetBufferSize(), &g_pVertexLayout);
-    pVSBlob->Release();
-    if (FAILED(hr))
-        return hr;
-
-    // Set the input layout
-    mRenderManager.ctx->IASetInputLayout(g_pVertexLayout);
-
-    // Compile the pixel shader
-    ID3DBlob* pPSBlob = NULL;
-    mRenderManager.CompileShaderFromFile("Tutorial07.fx", "PS", "ps_4_0", &pPSBlob);
-
-
-    // Create the pixel shader
-    hr = mRenderManager.device->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &g_pPixelShader);
-    pPSBlob->Release();
-    if (FAILED(hr))
-        return hr;
+    lbSuccess &= lPixelShader.Compile("Tutorial07.fx", "PS");
+    lbSuccess &= lVertexShader.Compile("Tutorial07.fx", "VS", gVertexLayoutPosition);
 
     // Create vertex buffer
     SimpleVertex vertices[] =
@@ -75,6 +43,7 @@ Game::Construct()
         XMFLOAT3(0.5f, -0.5f, 0.5f),
         XMFLOAT3(-0.5f, -0.5f, 0.5f),
     };
+
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
@@ -84,7 +53,7 @@ Game::Construct()
     D3D11_SUBRESOURCE_DATA InitData;
     ZeroMemory(&InitData, sizeof(InitData));
     InitData.pSysMem = vertices;
-    hr = mRenderManager.device->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
+    HRESULT hr = mRenderManager.device->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
     if (FAILED(hr))
         return hr;
 
@@ -113,8 +82,8 @@ Game::Render()
     mRenderManager.ctx->ClearDepthStencilView(mRenderManager.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     // Render a triangle
-    mRenderManager.ctx->VSSetShader(g_pVertexShader, NULL, 0);
-    mRenderManager.ctx->PSSetShader(g_pPixelShader, NULL, 0);
+    lPixelShader.Activate();
+    lVertexShader.Activate();
     mRenderManager.ctx->Draw(3, 0);
 
     // Present the information rendered to the back buffer to the front buffer (the screen)

@@ -163,6 +163,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Graphics\Shaders\Shader.h" />
+    <ClInclude Include="Core\Graphics\Shaders\VertexLayout.h" />
     <ClInclude Include="Core\Memory\Allocator.h" />
     <ClInclude Include="Core\CoreTypes.h" />
     <ClInclude Include="Core\Memory\MemoryManager.h" />
@@ -176,6 +178,8 @@
     <ClInclude Include="Toolkit\Debug\DebugConsole.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Graphics\Shaders\Shader.cpp" />
+    <ClCompile Include="Core\Graphics\Shaders\VertexLayout.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Lithium.cpp" />
     <ClCompile Include="Core\Memory\MemoryManager.cpp" />

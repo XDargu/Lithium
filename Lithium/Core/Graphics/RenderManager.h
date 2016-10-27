@@ -40,10 +40,10 @@ public:
 
     sBool
     RenderManager::CompileShaderFromFile(
-        String128   lacFileName,
-        String128   lacEntryPoint,
-        String128   lacShaderModel,
-        ID3DBlob**  lppBlobOut);
+        String128Arg   lacFileName,
+        String128Arg   lacEntryPoint,
+        String128Arg   lacShaderModel,
+        ID3DBlob**     lppBlobOut);
 
 	void ActivateBackbuffer();
 
