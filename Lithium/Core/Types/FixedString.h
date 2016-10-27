@@ -11,7 +11,7 @@ public:
 		lString[0] = 0x0;
 	}
 
-	FixedString<Size>(const sChar* arg)
+	FixedString<Size>(const sChar8* arg)
 	{
 		strncpy_s(lString, arg, Size);
 	}
@@ -30,13 +30,13 @@ public:
 		strncpy_s(lString, arg.lString, Size);
 	}
 
-	sChar*
+	sChar8*
 		GetString()
 	{
 		return lString;
 	}
 
-	FixedString<Size>& operator=(const sChar* arg)
+	FixedString<Size>& operator=(const sChar8* arg)
 	{
 		strncpy_s(lString, arg, Size);
 		return *this;
@@ -58,7 +58,7 @@ public:
 		return *this;
 	}
 
-	sChar lString[Size];
+	sChar8 lString[Size];
 };
 
 typedef FixedString<32> String32;

@@ -16,6 +16,8 @@ RenderManager::RenderManager()
 sBool 
 RenderManager::Construct() 
 {
+    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, "[Render Manager] Creating DirectX hardware data");
+
 	HRESULT hr = S_OK;
 
 	RECT rc;
@@ -43,6 +45,10 @@ RenderManager::Construct()
 	};
 	UINT numFeatureLevels = ARRAYSIZE(featureLevels);
 
+#ifdef _DEBUG
+    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+
 	DXGI_SWAP_CHAIN_DESC sd;
 	ZeroMemory(&sd, sizeof(sd));
 	sd.BufferCount = 1;
@@ -59,31 +65,48 @@ RenderManager::Construct()
 
 	D3D_FEATURE_LEVEL       featureLevel = D3D_FEATURE_LEVEL_11_0;
 
+    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, "[Render Manager] Creating device and swap chain");
+
 	for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
 	{
 		D3D_DRIVER_TYPE g_driverType = driverTypes[driverTypeIndex];
 		hr = D3D11CreateDeviceAndSwapChain(NULL, g_driverType, NULL, createDeviceFlags, featureLevels, numFeatureLevels,
 			D3D11_SDK_VERSION, &sd, &swap_chain, &device, &featureLevel, &ctx);
-		if (SUCCEEDED(hr))
-			break;
+        if (SUCCEEDED(hr))
+        {
+            break;
+        }
 	}
 
-	if (FAILED(hr))
-		return FALSE;
+    if (FAILED(hr))
+    {
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, "[Render Manager] Can't find device");
+        return FALSE;
+    }
 
 	// Create a render target view
+    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, "[Render Manager] Creating render target view");
+
 	ID3D11Texture2D* pBackBuffer = NULL;
 	hr = swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-	if (FAILED(hr))
-		return FALSE;
+    if (FAILED(hr))
+    {
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, "[Render Manager] Error getting swap chain view buffer");
+        return FALSE;
+    }
 
 	hr = device->CreateRenderTargetView(pBackBuffer, NULL, &render_target_view);
 	pBackBuffer->Release();
 	if (FAILED(hr))
-		return FALSE;
+    {
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, "[Render Manager] Error creating render target view");
+        return FALSE;
+    }
 
 	// ------------------------------------
 	// Create depth stencil texture
+    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, "[Render Manager] Creating depth stencil buffer");
+
 	D3D11_TEXTURE2D_DESC descDepth;
 	ZeroMemory(&descDepth, sizeof(descDepth));
 	descDepth.Width = width;
@@ -99,9 +122,14 @@ RenderManager::Construct()
 	descDepth.MiscFlags = 0;
 	hr = device->CreateTexture2D(&descDepth, NULL, &depth_stencil);
 	if (FAILED(hr))
-		return FALSE;
+    {
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, "[Render Manager] Error creating depth stencil buffer");
+        return FALSE;
+    }
 
 	// Create the depth stencil view
+    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, "[Render Manager] Creating depth stencil view");
+
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
 	ZeroMemory(&descDSV, sizeof(descDSV));
 	descDSV.Format = descDepth.Format;
@@ -109,8 +137,12 @@ RenderManager::Construct()
 	descDSV.Texture2D.MipSlice = 0;
 	hr = device->CreateDepthStencilView(depth_stencil, &descDSV, &depth_stencil_view);
 	if (FAILED(hr))
-		return FALSE;
-	//SET_RENDER_DEBUG_NAME(depth_stencil_view, "Render_depth_stencil_view");
+    {
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, "[Render Manager] Error creating depth stencil view");
+        return FALSE;
+    }
+
+	SET_RENDER_DEBUG_NAME(depth_stencil_view, "Render_depth_stencil_view");
 
 	xres = width;
 	yres = height;
@@ -141,6 +173,8 @@ RenderManager::ActivateBackbuffer()
 void
 RenderManager::Release() 
 {
+    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, "[Render Manager] Releasing render manager");
+
 	if (ctx) ctx->ClearState();
 	SAFE_RELEASE(depth_stencil_view);
 	SAFE_RELEASE(depth_stencil);

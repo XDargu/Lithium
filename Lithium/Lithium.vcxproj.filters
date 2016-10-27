@@ -16,6 +16,12 @@
     <Filter Include="Core\Util">
       <UniqueIdentifier>{b812f6cf-8730-4af0-99f4-481af8837b13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Toolkit">
+      <UniqueIdentifier>{13573912-9c73-4784-a6b3-472a21077f2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Toolkit\Debug">
+      <UniqueIdentifier>{bfc8cf2e-9b67-41ac-ad30-60d3239f476a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -43,6 +49,7 @@
       <Filter>Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Core\Util\Util.h" />
+    <ClInclude Include="Toolkit\Debug\DebugConsole.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
@@ -54,5 +61,6 @@
     <ClCompile Include="Core\Graphics\RenderManager.cpp">
       <Filter>Core\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Toolkit\Debug\DebugConsole.cpp" />
   </ItemGroup>
 </Project>

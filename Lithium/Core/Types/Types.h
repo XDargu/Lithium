@@ -10,7 +10,8 @@ typedef char sChar32;
 
 typedef int				   sBool;
 
-typedef char               sChar;
+typedef char               sChar8;
+typedef wchar_t            sChar16;
 
 typedef signed char        sInt8;
 typedef short              sInt16;

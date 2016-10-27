@@ -6,8 +6,9 @@
 #pragma warning( disable: 4005 )
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <d3d9.h>         // D3DPERF_*
 #pragma warning( pop )
-
+#pragma comment( lib, "dxguid.lib")
 
 // Compilation defines
 #define SET_RENDER_DEBUG_NAME(obj,name) (obj)->SetPrivateData(WKPDID_D3DDebugObjectName, (UINT) strlen( name ), name );

@@ -17,7 +17,6 @@ Game::Construct()
 void
 Game::Update()
 {
-
 }
 
 void
