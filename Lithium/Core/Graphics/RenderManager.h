@@ -6,9 +6,10 @@
 #pragma warning( disable: 4005 )
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <D3Dcommon.h>
+#include <d3dx11.h>
 #include <d3d9.h>         // D3DPERF_*
 #pragma warning( pop )
-#pragma comment( lib, "dxguid.lib")
 
 // Compilation defines
 #define SET_RENDER_DEBUG_NAME(obj,name) (obj)->SetPrivateData(WKPDID_D3DDebugObjectName, (UINT) strlen( name ), name );
@@ -32,9 +33,17 @@ public:
 	// Methods
 	RenderManager();
 	sBool Construct();
-	void Release();
 
-	//sBool CompileShaderFromFile(const char* szFileName, const char* szEntryPoint, const char* szShaderModel, ID3DBlob** ppBlobOut);
+    sBool ConstructDevice();
+
+    void Release();
+
+    sBool
+    RenderManager::CompileShaderFromFile(
+        String128   lacFileName,
+        String128   lacEntryPoint,
+        String128   lacShaderModel,
+        ID3DBlob**  lppBlobOut);
 
 	void ActivateBackbuffer();
 

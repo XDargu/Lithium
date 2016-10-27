@@ -31,7 +31,7 @@ public:
 	}
 
 	sChar8*
-		GetString()
+	GetString()
 	{
 		return lString;
 	}
