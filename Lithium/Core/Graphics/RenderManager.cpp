@@ -156,7 +156,7 @@ RenderManager::ConstructDevice()
         return FALSE;
     }
 
-    //SET_RENDER_DEBUG_NAME(depth_stencil_view, "Render_depth_stencil_view");
+    SET_RENDER_DEBUG_NAME(depth_stencil_view, "Render_depth_stencil_view");
 
     xres = width;
     yres = height;

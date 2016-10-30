@@ -36,6 +36,8 @@ Game::Construct()
     lbSuccess &= lPixelShader.Compile("Tutorial07.fx", "PS");
     lbSuccess &= lVertexShader.Compile("Tutorial07.fx", "VS", gVertexLayoutPosition);
 
+    
+
     // Create vertex buffer
     SimpleVertex vertices[] =
     {

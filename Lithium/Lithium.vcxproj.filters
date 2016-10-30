@@ -25,6 +25,15 @@
     <Filter Include="Core\Graphics\Shaders">
       <UniqueIdentifier>{4e3e325f-0f75-4af2-b620-371da2102c66}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{68b09cc3-20d9-4dae-973a-58d23c9490ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Toolkit\AI">
+      <UniqueIdentifier>{572d5203-c650-490f-8e98-9fa418835946}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{31dc2017-d82b-49a9-b5b9-8f227427a86a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -59,6 +68,7 @@
     <ClInclude Include="Core\Graphics\Shaders\VertexLayout.h">
       <Filter>Core\Graphics\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
@@ -77,5 +87,8 @@
     <ClCompile Include="Core\Graphics\Shaders\VertexLayout.cpp">
       <Filter>Core\Graphics\Shaders</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Resources.rc" />
   </ItemGroup>
 </Project>

@@ -119,6 +119,9 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3d9.lib;d3dx11d.lib;d3dx9d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>if exist "$(TargetDir)$(TargetName).pdb.locked" del "$(TargetDir)$(TargetName).pdb.locked" , if exist "$(TargetDir)$(TargetName).pdb" if not exist "$(TargetDir)$(TargetName).pdb.locked" move "$(TargetDir)$(TargetName).pdb" "$(TargetDir)$(TargetName).pdb.locked"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -158,6 +161,9 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3d9.lib;d3dx11.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>if exist "$(TargetDir)$(TargetName).pdb.locked" del "$(TargetDir)$(TargetName).pdb.locked" , if exist "$(TargetDir)$(TargetName).pdb" if not exist "$(TargetDir)$(TargetName).pdb.locked" move "$(TargetDir)$(TargetName).pdb" "$(TargetDir)$(TargetName).pdb.locked"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -172,6 +178,7 @@
     <ClInclude Include="Core\Util\Util.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Core\Graphics\RenderManager.h" />
+    <ClInclude Include="Resources\resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Core\Types\Types.h" />
@@ -191,6 +198,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Toolkit\Debug\DebugConsole.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Resources.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

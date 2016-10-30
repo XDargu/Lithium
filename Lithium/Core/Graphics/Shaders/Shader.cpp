@@ -15,7 +15,7 @@ PixelShader::Compile(
     
     if (!lbSuccess)
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Error compiling pixel shader %s", lacFileName);
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error compiling pixel shader %s", lacFileName);
         return FALSE;
     }
 
@@ -28,11 +28,14 @@ PixelShader::Compile(
         , &mpPixelShader);
     if (FAILED(hr))
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Error creating pixel shader %s", lacFileName);
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error creating pixel shader %s", lacFileName);
 
         lpVSBlob->Release();
         return FALSE;
     }
+
+    SET_RENDER_DEBUG_NAME(mpPixelShader, "Pixel shader");
+
 
     lpVSBlob->Release();
     
@@ -64,7 +67,7 @@ VertexShader::Compile(
     sBool lbSuccess = Game::GetInstance().mRenderManager.CompileShaderFromFile(lacFileName, lacEntryPoint, "vs_4_0", &lpVSBlob);
     if (!lbSuccess)
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Error compiling vertex shader %s", lacFileName);
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error compiling vertex shader %s", lacFileName);
         return FALSE;
     }
     // Create the vertex shader
@@ -77,10 +80,12 @@ VertexShader::Compile(
 
     if (FAILED(hr))
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Error creating vertex shader %s", lacFileName);
+        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error creating vertex shader %s", lacFileName);
         lpVSBlob->Release();
         return FALSE;
     }
+
+    SET_RENDER_DEBUG_NAME(mpVertexShader, "Vertex shader");
 
     // Create the input layout
     hr = Game::GetInstance().mRenderManager.device->CreateInputLayout(
@@ -98,6 +103,9 @@ VertexShader::Compile(
         gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Error compiling vertex shader input layout %s", lacFileName);
         return FALSE;
     }
+
+    SET_RENDER_DEBUG_NAME(mpVertexLayout, "Vertex layout");
+
 
     return TRUE;
 }
