@@ -8,14 +8,14 @@ PixelShader::Compile(
     String128 lacFileName,
     String128 lacEntryPoint )
 {
-    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Compiling pixel shader %s", lacFileName);
+    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Verbose, "[Shader] Compiling pixel shader %s", lacFileName);
 
     ID3DBlob* lpVSBlob = NULL;
     sBool lbSuccess = Game::GetInstance().mRenderManager.CompileShaderFromFile(lacFileName, lacEntryPoint, "ps_4_0", &lpVSBlob);
     
     if (!lbSuccess)
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error compiling pixel shader %s", lacFileName);
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Error, cTkDebugConsole::eDebugConsoleMode_Normal, "[Shader] Error compiling pixel shader %s", lacFileName);
         return FALSE;
     }
 
@@ -28,7 +28,7 @@ PixelShader::Compile(
         , &mpPixelShader);
     if (FAILED(hr))
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error creating pixel shader %s", lacFileName);
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Error, cTkDebugConsole::eDebugConsoleMode_Normal, "[Shader] Error creating pixel shader %s", lacFileName);
 
         lpVSBlob->Release();
         return FALSE;
@@ -60,14 +60,14 @@ VertexShader::Compile(
     String128   lacEntryPoint,
     VerexLayout lLayout )
 {
-    gDebugConsole.Write(DebugConsole::eDebugConsoleType_Info, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Compiling vertex shader %s", lacFileName);
+    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Verbose, "[Shader] Compiling vertex shader %s", lacFileName);
 
     // A blob is a representation of a buffer in dx, a void pointer + size
     ID3DBlob* lpVSBlob = NULL;
     sBool lbSuccess = Game::GetInstance().mRenderManager.CompileShaderFromFile(lacFileName, lacEntryPoint, "vs_4_0", &lpVSBlob);
     if (!lbSuccess)
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error compiling vertex shader %s", lacFileName);
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Error, cTkDebugConsole::eDebugConsoleMode_Normal, "[Shader] Error compiling vertex shader %s", lacFileName);
         return FALSE;
     }
     // Create the vertex shader
@@ -80,7 +80,7 @@ VertexShader::Compile(
 
     if (FAILED(hr))
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Normal, "[Shader] Error creating vertex shader %s", lacFileName);
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Error, cTkDebugConsole::eDebugConsoleMode_Normal, "[Shader] Error creating vertex shader %s", lacFileName);
         lpVSBlob->Release();
         return FALSE;
     }
@@ -100,7 +100,7 @@ VertexShader::Compile(
 
     if (FAILED(hr))
     {
-        gDebugConsole.Write(DebugConsole::eDebugConsoleType_Error, DebugConsole::eID3D11InputLayout_Verbose, "[Shader] Error compiling vertex shader input layout %s", lacFileName);
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Error, cTkDebugConsole::eDebugConsoleMode_Normal, "[Shader] Error compiling vertex shader input layout %s", lacFileName);
         return FALSE;
     }
 

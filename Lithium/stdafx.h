@@ -15,4 +15,4 @@
 #include <assert.h>
 #include "Core\Types\Types.h"
 #include "Core\Types\FixedString.h"
-#include "Toolkit/Debug/DebugConsole.h"
+#include "Toolkit\Debugging\DebugConsole.h"
