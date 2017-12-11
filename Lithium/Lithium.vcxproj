@@ -169,6 +169,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Toolkit\Debugging\Asserter.h" />
     <ClInclude Include="Core\Graphics\Shaders\Shader.h" />
     <ClInclude Include="Core\Graphics\Shaders\VertexLayout.h" />
     <ClInclude Include="Core\Memory\Allocator.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Core\Types\Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Toolkit\Debugging\Asserter.cpp" />
     <ClCompile Include="Core\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Shaders\VertexLayout.cpp" />
     <ClCompile Include="Toolkit\Debugging\DebugConsole.cpp" />

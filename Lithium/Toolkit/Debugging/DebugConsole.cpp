@@ -66,11 +66,11 @@ const int ConsoleColours[3] = {
 
 HANDLE mConsoleHandle;
 
-
 void
 cTkDebugConsole::Construct()
 {
-    meConsoleMode = eDebugConsoleMode_Normal;
+
+    meConsoleMode = eDebugConsoleMode_Verbose;
 
     AllocConsole();
     AttachConsole(GetCurrentProcessId());

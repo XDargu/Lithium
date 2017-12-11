@@ -71,6 +71,9 @@
     <ClInclude Include="Toolkit\Debugging\DebugConsole.h">
       <Filter>Toolkit\Debugging</Filter>
     </ClInclude>
+    <ClInclude Include="Toolkit\Debugging\Asserter.h">
+      <Filter>Toolkit\Debugging</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
@@ -89,6 +92,9 @@
       <Filter>Core\Graphics\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="Toolkit\Debugging\DebugConsole.cpp">
+      <Filter>Toolkit\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="Toolkit\Debugging\Asserter.cpp">
       <Filter>Toolkit\Debugging</Filter>
     </ClCompile>
   </ItemGroup>

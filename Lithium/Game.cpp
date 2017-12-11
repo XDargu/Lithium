@@ -73,6 +73,8 @@ Game::Construct()
 void
 Game::Update()
 {
+    POW2_ASSERT_MSG(false, "Hola a todos");
+
 }
 
 void
