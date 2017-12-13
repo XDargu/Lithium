@@ -27,7 +27,7 @@ public:
 	Allocate(size_t mSize, sUInt8 mAlignement = 4) = 0;
 
 	virtual void
-	Deallocate(void* mPointer) = 0;
+	Deallocate(void* lPointer) = 0;
 
 	void* GetStart() const
 	{
@@ -50,24 +50,6 @@ public:
 	}
 
 protected:
-
-	inline void*
-		AlignForward(void* lAddress, sUInt8 lAlignment)
-	{
-		// (address + (alignment - 1)) & (~(alignment - 1))
-		return (void*)((reinterpret_cast<sUPtr>(lAddress) + static_cast<sUPtr>(lAlignment - 1)) & static_cast<sUPtr>(~(lAlignment - 1)));
-	}
-
-	inline sUInt8
-		AlignForwardPadding(const void* lAddress, sUInt8 lAlignment)
-	{
-		sUInt8 lPadding = lAlignment - (reinterpret_cast<sUPtr>(lAddress) & static_cast<sUPtr>(lAlignment - 1));
-
-		if (lPadding == lAlignment)
-			return 0; //already aligned
-
-		return lPadding;
-	}
 
 	void*	mStart;
 	size_t	mSize;
@@ -144,62 +126,5 @@ namespace custom_allocator
 		lAllocator.Deallocate(lArray - lHeaderSize);
 	}
 }
-
-class LinearAllocator : public Allocator
-{
-public:
-
-	LinearAllocator(size_t lSize, void* lStart)
-		: Allocator(lSize, lStart), mCurrentPos(lStart)
-	{
-		assert(lSize > 0);
-	}
-
-	~LinearAllocator()
-	{
-		mCurrentPos = nullptr;
-	}
-
-	void*
-		Allocate(size_t lSize, sUInt8 mAlignement) override
-	{
-		assert(lSize > 0);
-
-		sUInt8 lPadding = AlignForwardPadding(mCurrentPos, mAlignement);
-
-		if (mUsedMemory + lPadding + lSize > mSize)
-		{
-			return nullptr;
-		}
-
-		sUPtr lAlignedAddress = (sUPtr)mCurrentPos + lPadding;
-
-		mCurrentPos = (void*)(lAlignedAddress + lSize);
-
-		mUsedMemory += lSize + lPadding;
-		mNumAllocations++;
-
-		return (void*)lAlignedAddress;
-	}
-
-	void
-	Deallocate(void* mPointer) override
-	{
-		//assert(false && "Use clear instead");
-	}
-
-	void Clear()
-	{
-		mNumAllocations = 0;
-		mUsedMemory = 0;
-		mCurrentPos = mStart;
-	}
-
-
-	LinearAllocator(const LinearAllocator&) = delete;
-	LinearAllocator& operator=(const LinearAllocator&) = delete;
-
-	void* mCurrentPos;
-};
 
 #endif

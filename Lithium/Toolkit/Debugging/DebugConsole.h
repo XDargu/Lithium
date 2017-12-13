@@ -32,6 +32,12 @@ public:
         ...
     );
 
+    void
+    SetMinMessageLevel(eDebugConsoleMode eMessageLevel)
+    {
+        meConsoleMode = eMessageLevel;
+    }
+
 private:
 
     void

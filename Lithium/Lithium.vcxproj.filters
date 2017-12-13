@@ -60,7 +60,6 @@
     <ClInclude Include="Core\Graphics\RenderManager.h">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Util\Util.h" />
     <ClInclude Include="Core\Graphics\Shaders\Shader.h">
       <Filter>Core\Graphics\Shaders</Filter>
     </ClInclude>
@@ -73,6 +72,27 @@
     </ClInclude>
     <ClInclude Include="Toolkit\Debugging\Asserter.h">
       <Filter>Toolkit\Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\LinearAllocator.h">
+      <Filter>Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Util\PointerMath.h">
+      <Filter>Core\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Util\Util.h">
+      <Filter>Core\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\StackAllocator.h">
+      <Filter>Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\FreeListAllocator.h">
+      <Filter>Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\PoolAllocator.h">
+      <Filter>Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Memory\ProxyAllocator.h">
+      <Filter>Core\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +116,24 @@
     </ClCompile>
     <ClCompile Include="Toolkit\Debugging\Asserter.cpp">
       <Filter>Toolkit\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\Allocator.cpp">
+      <Filter>Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\LinearAllocator.cpp">
+      <Filter>Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\StackAllocator.cpp">
+      <Filter>Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\FreeListAllocator.cpp">
+      <Filter>Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\PoolAllocator.cpp">
+      <Filter>Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Memory\ProxyAllocator.cpp">
+      <Filter>Core\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

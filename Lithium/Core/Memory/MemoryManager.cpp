@@ -5,14 +5,14 @@
 cEgMemoryManager::cEgMemoryManager()
 {
 	mLinearPool = malloc(MEM_SIZE);
-	mLinearAllocator = new LinearAllocator(MEM_SIZE, mLinearPool);
+	mLinearAllocator = new FreeListAllocator(MEM_SIZE, mLinearPool);
 	SetCurrentPool(List);
 }
 
 
 cEgMemoryManager::~cEgMemoryManager()
 {
-	mLinearAllocator->Clear();
+	//mLinearAllocator->Clear();
 	delete mLinearAllocator;
 }
 
@@ -55,3 +55,6 @@ cEgMemoryManager::Free(
 {
 	getAllocator(lPool).Deallocate(lPointer);
 }
+
+
+cEgMemoryManager gMemoryManager;

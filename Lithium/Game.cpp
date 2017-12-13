@@ -2,6 +2,9 @@
 
 #include "Game.h"
 #include "Core/Graphics/Shaders/Shader.h"
+#include <vector>
+#include "Core\Memory\FreeListAllocator.h"
+#include "Core\Memory\MemoryManager.h"
 
 #pragma warning( push )
 #pragma warning( disable: 4838 )
@@ -15,10 +18,46 @@ VertexShader    lVertexShader;
 
 ID3D11Buffer*           g_pVertexBuffer = NULL;
 
+template <typename T>
+class CustomAllocator : public std::allocator<T>
+{
+public:
+    typedef size_t size_type;
+    typedef T* pointer;
+    typedef const T* const_pointer;
+
+    template<typename _Tp1>
+    struct rebind
+    {
+        typedef CustomAllocator<_Tp1> other;
+    };
+
+    pointer allocate(size_type n, const void *hint = 0)
+    {
+        //fprintf(stderr, "Alloc %d bytes.\n", n * sizeof(T));
+        //return std::allocator<T>::allocate(n, hint);
+        //return custom_allocator::AllocateNew<T>(gMemoryManager.getAllocator(cEgMemoryManager::CurrentPool));
+        return custom_allocator::AllocateArray<T>(gMemoryManager.getAllocator(cEgMemoryManager::CurrentPool), n);
+    }
+
+    void deallocate(pointer p, size_type n)
+    {
+        //fprintf(stderr, "Dealloc %d bytes (%p).\n", n * sizeof(T), p);
+        //return std::allocator<T>::deallocate(p, n);
+        //custom_allocator::DeallocateDelete<T>(gMemoryManager.getAllocator(cEgMemoryManager::CurrentPool), *p);
+        custom_allocator::DeallocateArray<T>(gMemoryManager.getAllocator(cEgMemoryManager::CurrentPool), p);
+    }
+
+    CustomAllocator() throw() : std::allocator<T>() { }
+    CustomAllocator(const CustomAllocator &a) throw() : std::allocator<T>(a) { }
+    template <class U>
+    CustomAllocator(const CustomAllocator<U> &a) throw() : std::allocator<T>(a) { }
+    ~CustomAllocator() throw() { }
+};
 
 struct SimpleVertex
 {
-    XMFLOAT3 Pos;
+    XMFLOAT3 Pos; 
 };
 
 Game& Game::GetInstance()
@@ -29,6 +68,8 @@ Game& Game::GetInstance()
 sBool
 Game::Construct()
 {
+    gDebugConsole.SetMinMessageLevel(cTkDebugConsole::eDebugConsoleMode::eDebugConsoleMode_Verbose);
+
     sBool lbSuccess = mRenderManager.Construct();
 
     ID3DBlob* lpVSBlob = NULL;
@@ -65,7 +106,19 @@ Game::Construct()
     mRenderManager.ctx->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
 
     // Set primitive topology
-    mRenderManager.ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    mRenderManager.ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);    
+
+    std::vector<sInt32, CustomAllocator<sInt32>> lTest;
+
+    for (sInt32 i = 0; i < 200; i++)
+    {
+        lTest.push_back(i);
+    }
+
+    lTest.push_back(2);
+
+    lTest.clear();
+    lTest.resize(0);
 
     return lbSuccess;
 }
@@ -73,8 +126,6 @@ Game::Construct()
 void
 Game::Update()
 {
-    POW2_ASSERT_MSG(false, "Hola a todos");
-
 }
 
 void

@@ -69,7 +69,6 @@ HANDLE mConsoleHandle;
 void
 cTkDebugConsole::Construct()
 {
-
     meConsoleMode = eDebugConsoleMode_Verbose;
 
     AllocConsole();

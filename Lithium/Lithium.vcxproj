@@ -169,6 +169,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Memory\LinearAllocator.h" />
+    <ClInclude Include="Core\Memory\PoolAllocator.h" />
+    <ClInclude Include="Core\Util\PointerMath.h" />
+    <ClInclude Include="Core\Memory\StackAllocator.h" />
+    <ClInclude Include="Core\Memory\FreeListAllocator.h" />
+    <ClInclude Include="Core\Memory\ProxyAllocator.h" />
     <ClInclude Include="Toolkit\Debugging\Asserter.h" />
     <ClInclude Include="Core\Graphics\Shaders\Shader.h" />
     <ClInclude Include="Core\Graphics\Shaders\VertexLayout.h" />
@@ -186,6 +192,12 @@
     <ClInclude Include="Core\Types\Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Memory\Allocator.cpp" />
+    <ClCompile Include="Core\Memory\LinearAllocator.cpp" />
+    <ClCompile Include="Core\Memory\PoolAllocator.cpp" />
+    <ClCompile Include="Core\Memory\StackAllocator.cpp" />
+    <ClCompile Include="Core\Memory\FreeListAllocator.cpp" />
+    <ClCompile Include="Core\Memory\ProxyAllocator.cpp" />
     <ClCompile Include="Toolkit\Debugging\Asserter.cpp" />
     <ClCompile Include="Core\Graphics\Shaders\Shader.cpp" />
     <ClCompile Include="Core\Graphics\Shaders\VertexLayout.cpp" />

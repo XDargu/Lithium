@@ -2,8 +2,13 @@
 #define _MEMORY_MANAGER_H_
 
 #include "Allocator.h"
+#include "LinearAllocator.h"
+#include "PoolAllocator.h"
+#include "FreeListAllocator.h"
+#include <memory>
 
-#define MEM_SIZE 1048576000 //1GB
+#define MEM_SIZE 1024ULL * 1024 * 1024 //1GB
+//#define MEM_SIZE 128 //1KB
 
 class cEgMemoryManager
 {
@@ -50,9 +55,10 @@ public:
 
 	static const MemoryPool mDefaultPool = List;
 
-	LinearAllocator*  mLinearAllocator;
+	FreeListAllocator*  mLinearAllocator;
 	void*             mLinearPool;
 };
 
+extern cEgMemoryManager gMemoryManager;
 
 #endif
