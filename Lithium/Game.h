@@ -32,7 +32,7 @@ public:
 	void
 	Release();
 
-	RenderManager mRenderManager;
+	cEgRenderManager mRenderManager;
 };
 
 #endif

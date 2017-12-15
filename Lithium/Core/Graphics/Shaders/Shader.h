@@ -15,8 +15,8 @@ public:
 
     sBool
     Compile(
-        String128 lacFileName,
-        String128 lacEntryPoint );
+        cTkString128Arg lacFileName,
+        cTkString128Arg lacEntryPoint );
 
     void
     Activate();
@@ -38,9 +38,9 @@ public:
 
     sBool
     Compile(
-        String128   lacFileName,
-        String128   lacEntryPoint,
-        VerexLayout lLayout);
+        cTkString128Arg   lacFileName,
+        cTkString128Arg   lacEntryPoint,
+        cEgVertexDecl       lLayout);
 
     void
     Activate();

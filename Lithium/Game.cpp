@@ -5,23 +5,66 @@
 #include <vector>
 #include "Core\Memory\FreeListAllocator.h"
 #include "Core\Memory\MemoryManager.h"
-
-#pragma warning( push )
-#pragma warning( disable: 4838 )
-#include <xnamath.h>
-#pragma warning( pop )
+#include "Core\Graphics\Mesh.h"
 
 static Game gGame;
 
 PixelShader     lPixelShader;
 VertexShader    lVertexShader;
 
-ID3D11Buffer*           g_pVertexBuffer = NULL;
-
-struct SimpleVertex
+struct ConstantBuffer
 {
-    XMFLOAT3 Pos; 
+    XMMATRIX mWorld;
+    XMMATRIX mView;
+    XMMATRIX mProjection;
 };
+
+cEgMesh mTestMesh;
+ID3D11Buffer*           g_pConstantBuffer = NULL;
+
+sBool
+createCube(cEgMesh& lMesh, sFloat32 size) {
+
+    TkVector< EgVertexPosColor > vtxs;
+    vtxs.resize(8);
+    EgVertexPosColor *v = &vtxs[0];
+
+    // Top
+    v->Pos = XMFLOAT3(-1.0f * size, 1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+    v->Pos = XMFLOAT3(1.0f * size, 1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+    v->Pos = XMFLOAT3(1.0f * size, 1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+    v->Pos = XMFLOAT3(-1.0f * size, 1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 1.f, 0.f, 1.f); ++v;
+
+    // Bottom
+    v->Pos = XMFLOAT3(-1.0f * size, -1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+    v->Pos = XMFLOAT3(1.0f * size, -1.0f * size, -1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+    v->Pos = XMFLOAT3(1.0f * size, -1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+    v->Pos = XMFLOAT3(-1.0f * size, -1.0f * size, 1.0f * size); v->Color = XMFLOAT4(0.f, 0.f, 1.f, 1.f); ++v;
+
+    // Indices
+    cEgMesh::TIndex indices[] =
+    {
+        3, 0, 1,
+        2, 3, 1,
+
+        0, 4, 5,
+        1, 0, 5,
+
+        3, 7, 4,
+        0, 3, 4,
+
+        1, 5, 6,
+        2, 1, 6,
+
+        2, 6, 7,
+        3, 2, 7,
+
+        6, 5, 4,
+        7, 6, 4,
+    };
+
+    return lMesh.Create((unsigned)vtxs.size(), &vtxs[0], ARRAYSIZE(indices), indices, cEgMesh::TRIANGLE_LIST);
+}
 
 Game& Game::GetInstance()
 {
@@ -40,56 +83,17 @@ Game::Construct()
     ID3DBlob* lpVSBlob = NULL;
 
     lbSuccess &= lPixelShader.Compile("Tutorial07.fx", "PS");
-    lbSuccess &= lVertexShader.Compile("Tutorial07.fx", "VS", gVertexLayoutPosition);
-
+    lbSuccess &= lVertexShader.Compile("Tutorial07.fx", "VS", gVertexLayoutPositionColor);
     
-
-    // Create vertex buffer
-    SimpleVertex vertices[] =
-    {
-        XMFLOAT3(0.0f, 0.5f, 0.5f),
-        XMFLOAT3(0.5f, -0.5f, 0.5f),
-        XMFLOAT3(-0.5f, -0.5f, 0.5f),
-    };
-
     D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(SimpleVertex) * 3;
-    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    bd.ByteWidth = sizeof(ConstantBuffer);
+    bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
     bd.CPUAccessFlags = 0;
-    D3D11_SUBRESOURCE_DATA InitData;
-    ZeroMemory(&InitData, sizeof(InitData));
-    InitData.pSysMem = vertices;
-    HRESULT hr = mRenderManager.device->CreateBuffer(&bd, &InitData, &g_pVertexBuffer);
-    if (FAILED(hr))
-        return hr;
-
-    // Set vertex buffer
-    UINT stride = sizeof(SimpleVertex);
-    UINT offset = 0;
-    mRenderManager.ctx->IASetVertexBuffers(0, 1, &g_pVertexBuffer, &stride, &offset);
-
-    // Set primitive topology
-    mRenderManager.ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);    
-
-    TkVector<sInt32, cEgMemoryManager::Renderer> lTest;
-
-    TkMap<sInt32, String128> lMyMap;
-
-    lMyMap[2] = "Hey";
-    lMyMap[56] = "Hallo";
-    lMyMap[987] = "Howdy";
-
-    for (sInt32 i = 0; i < 200; i++)
-    {
-        lTest.push_back(i);
-    }
-
-    lTest.push_back(2);
-
-    lTest.clear();
-    lTest.resize(0);
+    HRESULT hr = mRenderManager.device->CreateBuffer(&bd, NULL, &g_pConstantBuffer);
+    
+    createCube(mTestMesh, 1);
 
     return lbSuccess;
 }
@@ -107,10 +111,42 @@ Game::Render()
     mRenderManager.ctx->ClearRenderTargetView(mRenderManager.render_target_view, ClearColor);
     mRenderManager.ctx->ClearDepthStencilView(mRenderManager.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-    // Render a triangle
-    lPixelShader.Activate();
+    // Initialize the view matrix
+    XMVECTOR Eye = XMVectorSet(0.0f, 2.0f, -5.0f, 0.0f);
+    XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    XMMATRIX g_View = XMMatrixLookAtRH(Eye, At, Up);
+
+    // Initialize the world matrix
+    XMMATRIX g_World1 = XMMatrixIdentity();
+
+    static sFloat32 t = 0.0f;
+    static DWORD dwTimeStart = 0;
+    DWORD dwTimeCur = GetTickCount();
+    if (dwTimeStart == 0)
+        dwTimeStart = dwTimeCur;
+    t = (dwTimeCur - dwTimeStart) / 1000.0f;
+
+    g_World1 = XMMatrixRotationY(t);
+
+    // Initialize the projection matrix
+    XMMATRIX g_Projection = XMMatrixPerspectiveFovRH(XM_PIDIV2, mRenderManager.xres / (FLOAT)mRenderManager.yres, 0.01f, 100.0f);
+
+    ConstantBuffer cb1;
+    cb1.mWorld = g_World1;
+    cb1.mView = g_View;
+    cb1.mProjection = g_Projection;
+    mRenderManager.ctx->UpdateSubresource(g_pConstantBuffer, 0, NULL, &cb1, 0, 0);
+
+    //
+    // Render the first cube
+    //
     lVertexShader.Activate();
-    mRenderManager.ctx->Draw(3, 0);
+    mRenderManager.ctx->VSSetConstantBuffers(0, 1, &g_pConstantBuffer);
+    lPixelShader.Activate();
+    mTestMesh.Activate();
+    mTestMesh.Render();
+
 
     // Present the information rendered to the back buffer to the front buffer (the screen)
     mRenderManager.swap_chain->Present(0, 0);

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "VertexLayout.h"
 
-#define DEF_VERTEX_LAYOUT(x) VerexLayout x(x##Layout, ARRAYSIZE(x##Layout)) 
+#define DEF_VERTEX_LAYOUT(x) cEgVertexDecl x(x##Layout, ARRAYSIZE(x##Layout)) 
 
 sUInt32
 GetBytesOfFormat(
@@ -20,7 +20,7 @@ GetBytesOfFormat(
     return 0;
 }
 
-VerexLayout::VerexLayout(
+cEgVertexDecl::cEgVertexDecl(
     D3D11_INPUT_ELEMENT_DESC*   lpElems, 
     UINT                        luNumElems)
     : mpElems(lpElems)
@@ -40,6 +40,14 @@ D3D11_INPUT_ELEMENT_DESC gVertexLayoutPositionLayout[] =
 
 DEF_VERTEX_LAYOUT(gVertexLayoutPosition);
 
+D3D11_INPUT_ELEMENT_DESC gVertexLayoutPositionColorLayout[] =
+{
+    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+};
+
+DEF_VERTEX_LAYOUT(gVertexLayoutPositionColor);
+
 D3D11_INPUT_ELEMENT_DESC gVertexLayoutPositionUVLayout[] =
 {
     { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -47,3 +55,14 @@ D3D11_INPUT_ELEMENT_DESC gVertexLayoutPositionUVLayout[] =
 };
 
 DEF_VERTEX_LAYOUT(gVertexLayoutPositionUV);
+
+// -----------------------
+template<>
+cEgVertexDecl* GetVertexDecl< EgVertexPos >() {
+    return &gVertexLayoutPosition;
+}
+
+template<>
+cEgVertexDecl* GetVertexDecl< EgVertexPosColor >() {
+    return &gVertexLayoutPositionColor;
+}

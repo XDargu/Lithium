@@ -5,8 +5,8 @@
 
 sBool 
 PixelShader::Compile(
-    String128 lacFileName,
-    String128 lacEntryPoint )
+    cTkString128Arg lacFileName,
+    cTkString128Arg lacEntryPoint )
 {
     gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Verbose, "[Shader] Compiling pixel shader %s", lacFileName);
 
@@ -56,9 +56,9 @@ PixelShader::Release()
 
 sBool
 VertexShader::Compile(
-    String128   lacFileName,
-    String128   lacEntryPoint,
-    VerexLayout lLayout )
+    cTkString128Arg   lacFileName,
+    cTkString128Arg   lacEntryPoint,
+    cEgVertexDecl       lLayout )
 {
     gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Verbose, "[Shader] Compiling vertex shader %s", lacFileName);
 

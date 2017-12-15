@@ -169,6 +169,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Graphics\Mesh.h" />
     <ClInclude Include="Core\Memory\LinearAllocator.h" />
     <ClInclude Include="Core\Memory\PoolAllocator.h" />
     <ClInclude Include="Core\Util\PointerMath.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Toolkit\Types\Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Graphics\Mesh.cpp" />
     <ClCompile Include="Core\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Memory\LinearAllocator.cpp" />
     <ClCompile Include="Core\Memory\PoolAllocator.cpp" />

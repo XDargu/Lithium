@@ -100,6 +100,9 @@
     <ClInclude Include="Toolkit\Types\Types.h">
       <Filter>Toolkit\Types</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Graphics\Mesh.h">
+      <Filter>Core\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
@@ -140,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="Core\Memory\ProxyAllocator.cpp">
       <Filter>Core\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Graphics\Mesh.cpp">
+      <Filter>Core\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

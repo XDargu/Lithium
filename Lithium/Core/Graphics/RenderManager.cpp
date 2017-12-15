@@ -2,7 +2,7 @@
 #include "RenderManager.h"
 #include "Core\Util\Util.h"
 
-RenderManager::RenderManager()
+cEgRenderManager::cEgRenderManager()
 	: device(nullptr)
 	, ctx(nullptr)
 	, swap_chain(nullptr)
@@ -14,7 +14,7 @@ RenderManager::RenderManager()
 
 // --------------------------------------
 sBool 
-RenderManager::Construct() 
+cEgRenderManager::Construct() 
 {
     sBool lbSuccess = TRUE;    
     lbSuccess &= ConstructDevice();
@@ -28,7 +28,7 @@ RenderManager::Construct()
 }
 
 sBool 
-RenderManager::ConstructDevice()
+cEgRenderManager::ConstructDevice()
 {
     gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Render Manager] Creating DirectX hardware data");
 
@@ -166,7 +166,7 @@ RenderManager::ConstructDevice()
 
 // --------------------------------------
 void
-RenderManager::ActivateBackbuffer() 
+cEgRenderManager::ActivateBackbuffer() 
 {
     ctx->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
 
@@ -183,7 +183,7 @@ RenderManager::ActivateBackbuffer()
 
 // --------------------------------------
 void
-RenderManager::Release() 
+cEgRenderManager::Release() 
 {
     gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Render Manager] Releasing render manager");
 
@@ -203,11 +203,11 @@ RenderManager::Release()
 }
 
 sBool
-RenderManager::CompileShaderFromFile(
-    String128Arg   lacFileName,
-    String128Arg   lacEntryPoint,
-    String128Arg   lacShaderModel,
-    ID3DBlob**     lppBlobOut)
+cEgRenderManager::CompileShaderFromFile(
+    cTkString128Arg   lacFileName,
+    cTkString128Arg   lacEntryPoint,
+    cTkString128Arg   lacShaderModel,
+    ID3DBlob**        lppBlobOut)
 {
     HRESULT hr = S_OK;
 

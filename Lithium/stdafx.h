@@ -12,7 +12,15 @@
 
 
 // TODO: reference additional headers your program requires here
+
+// C++
 #include <assert.h>
+
+// XNA
+#include <DirectXMath.h>
+
+using namespace DirectX;
+
 #include "Core\Types\Types.h"
 #include "Core\Types\FixedString.h"
 #include "Toolkit\Debugging\DebugConsole.h"

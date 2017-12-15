@@ -3,10 +3,10 @@
 
 #include "Core/Graphics/RenderManager.h"
 
-class VerexLayout {
+class cEgVertexDecl {
 public:
     
-    VerexLayout(
+    cEgVertexDecl(
         D3D11_INPUT_ELEMENT_DESC*   lpElems, 
         UINT                        luNumElems );
 
@@ -15,7 +15,20 @@ public:
     sUInt32                     muBytesPerVertex;
 };
 
-extern VerexLayout gVertexLayoutPosition;
-extern VerexLayout gVertexLayoutPositionUV;
+struct EgVertexPos {
+    XMFLOAT3 Pos;
+};
+
+struct EgVertexPosColor {
+    XMFLOAT3 Pos;
+    XMFLOAT4 Color;
+};
+
+template<class TVertex>
+cEgVertexDecl* GetVertexDecl();
+
+extern cEgVertexDecl gVertexLayoutPosition;
+extern cEgVertexDecl gVertexLayoutPositionUV;
+extern cEgVertexDecl gVertexLayoutPositionColor;
 
 #endif

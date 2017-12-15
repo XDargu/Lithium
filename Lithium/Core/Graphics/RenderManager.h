@@ -20,7 +20,7 @@
 
 // Classes
 
-class RenderManager 
+class cEgRenderManager 
 {
 public:
 	HWND					hWnd;
@@ -30,10 +30,10 @@ public:
 	ID3D11RenderTargetView* render_target_view;
 	ID3D11Texture2D*        depth_stencil;
 	ID3D11DepthStencilView* depth_stencil_view;
-	int                     xres, yres;
+	sInt32                  xres, yres;
 
 	// Methods
-	RenderManager();
+	cEgRenderManager();
 	sBool Construct();
 
     sBool ConstructDevice();
@@ -41,11 +41,11 @@ public:
     void Release();
 
     sBool
-    RenderManager::CompileShaderFromFile(
-        String128Arg   lacFileName,
-        String128Arg   lacEntryPoint,
-        String128Arg   lacShaderModel,
-        ID3DBlob**     lppBlobOut);
+    cEgRenderManager::CompileShaderFromFile(
+        cTkString128Arg   lacFileName,
+        cTkString128Arg   lacEntryPoint,
+        cTkString128Arg   lacShaderModel,
+        ID3DBlob**        lppBlobOut);
 
 	void ActivateBackbuffer();
 
