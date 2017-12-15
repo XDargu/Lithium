@@ -190,6 +190,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Core\Types\Types.h" />
+    <ClInclude Include="Toolkit\Types\Types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\Allocator.cpp" />

@@ -34,6 +34,9 @@
     <Filter Include="Toolkit\Debugging">
       <UniqueIdentifier>{bfc8cf2e-9b67-41ac-ad30-60d3239f476a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Toolkit\Types">
+      <UniqueIdentifier>{a2c1baca-0c9e-4490-a764-abf9a40a4f13}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -93,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="Core\Memory\ProxyAllocator.h">
       <Filter>Core\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Toolkit\Types\Types.h">
+      <Filter>Toolkit\Types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

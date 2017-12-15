@@ -1,19 +1,47 @@
 #include "stdafx.h"
 #include "MemoryManager.h"
+#include "Core\Util\PointerMath.h"
+#include "LinearAllocator.h"
+#include "PoolAllocator.h"
+#include "FreeListAllocator.h"
+#include "ProxyAllocator.h"
 #include <stdlib.h>
 
 cEgMemoryManager::cEgMemoryManager()
 {
-	mLinearPool = malloc(MEM_SIZE);
-	mLinearAllocator = new FreeListAllocator(MEM_SIZE, mLinearPool);
-	SetCurrentPool(List);
+	
+}
+
+void
+cEgMemoryManager::Construct()
+{
+    mMainAllocatorMemory = malloc(MEM_SIZE);
+
+    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] Allocating Main Memory");
+    mFreeListAllocator = new (mMainAllocatorMemory) FreeListAllocator(MEM_SIZE - sizeof(FreeListAllocator), pointer_math::Add(mMainAllocatorMemory, sizeof(FreeListAllocator)));
+
+    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] Allocating Rendering Memory");
+    mRendererAllocator = custom_allocator::AllocateNew<ProxyAllocator>(*mFreeListAllocator, *mFreeListAllocator);
+
+    POW2_ASSERT_MSG(mRendererAllocator != nullptr, "Error creating Renderer Allocator");
+
+    SetCurrentPool(List);
+
+    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] ** Memory Allocation Complete **");
 }
 
 
 cEgMemoryManager::~cEgMemoryManager()
 {
-	//mLinearAllocator->Clear();
-	delete mLinearAllocator;
+    if (mFreeListAllocator != nullptr)
+    {
+        if (mRendererAllocator != nullptr)
+        {
+            custom_allocator::DeallocateDelete(*mFreeListAllocator, mRendererAllocator);
+        }
+
+        mFreeListAllocator->~FreeListAllocator();
+    }
 }
 
 inline Allocator & cEgMemoryManager::getAllocator(MemoryPool lPool)
@@ -24,11 +52,14 @@ inline Allocator & cEgMemoryManager::getAllocator(MemoryPool lPool)
 		return getAllocator(mCurrentPool);
 		break;
 	case List:
-		return *mLinearAllocator;
+		return *mFreeListAllocator;
 		break;
+    case Renderer:
+        return *mRendererAllocator;
+        break;
 	}
 
-	return *mLinearAllocator;
+	return *mFreeListAllocator;
 }
 
 inline Allocator & cEgMemoryManager::getAllocator()

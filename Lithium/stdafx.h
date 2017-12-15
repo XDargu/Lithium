@@ -17,3 +17,4 @@
 #include "Core\Types\FixedString.h"
 #include "Toolkit\Debugging\DebugConsole.h"
 #include "Toolkit\Debugging\Asserter.h"
+#include "Toolkit\Types\Types.h"

@@ -13,6 +13,7 @@ public:
     Allocate(
         size_t lSize, 
         sUInt8 lAlignment ) override;
+
     void 
     Deallocate(
         void* lAddress ) override;

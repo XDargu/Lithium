@@ -24,7 +24,7 @@ public:
 	}
 
 	virtual void*
-	Allocate(size_t mSize, sUInt8 mAlignement = 4) = 0;
+	Allocate(size_t mSize, sUInt8 mAlignement = 8) = 0;
 
 	virtual void
 	Deallocate(void* lPointer) = 0;
@@ -60,17 +60,18 @@ protected:
 
 namespace custom_allocator
 {
-	template<class T>
-	T* AllocateNew(Allocator& lAllocator)
-	{
-		return new (lAllocator.Allocate(sizeof(T), __alignof(T))) T;
-	}
 
-	template<class T>
+    template <class T, class... Args>
+    T* AllocateNew(Allocator& lAllocator, Args&&... args)
+    {
+        return new (lAllocator.Allocate(sizeof(T), __alignof(T))) T(std::forward<Args>(args)...);
+    }
+
+	/*template<class T>
 	T* AllocateNew(Allocator& lAllocator, const T& lObject)
 	{
 		return new (lAllocator.Allocate(sizeof(T), __alignof(T))) T(lObject);
-	}
+	}*/
 
 	template<class T>
 	void DeallocateDelete(Allocator& lAllocator, T& lObject)
