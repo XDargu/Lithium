@@ -9,25 +9,32 @@
 
 cEgMemoryManager::cEgMemoryManager()
 {
-	
+    //mMainAllocatorMemory = nullptr;
+    //mFreeListAllocator = nullptr;
+    //mRendererAllocator = nullptr;
+
+    Construct();
 }
 
 void
 cEgMemoryManager::Construct()
 {
-    mMainAllocatorMemory = malloc(MEM_SIZE);
+    if (!mFreeListAllocator)
+    {
+        mMainAllocatorMemory = malloc(MEM_SIZE);
 
-    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] Allocating Main Memory");
-    mFreeListAllocator = new (mMainAllocatorMemory) FreeListAllocator(MEM_SIZE - sizeof(FreeListAllocator), pointer_math::Add(mMainAllocatorMemory, sizeof(FreeListAllocator)));
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] Allocating Main Memory");
+        mFreeListAllocator = new (mMainAllocatorMemory) FreeListAllocator(MEM_SIZE - sizeof(FreeListAllocator), pointer_math::Add(mMainAllocatorMemory, sizeof(FreeListAllocator)));
 
-    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] Allocating Rendering Memory");
-    mRendererAllocator = custom_allocator::AllocateNew<ProxyAllocator>(*mFreeListAllocator, *mFreeListAllocator);
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] Allocating Rendering Memory");
+        mRendererAllocator = custom_allocator::AllocateNew<ProxyAllocator>(*mFreeListAllocator, *mFreeListAllocator);
 
-    POW2_ASSERT_MSG(mRendererAllocator != nullptr, "Error creating Renderer Allocator");
+        POW2_ASSERT_MSG(mRendererAllocator != nullptr, "Error creating Renderer Allocator");
 
-    SetCurrentPool(List);
+        SetCurrentPool(List);
 
-    gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] ** Memory Allocation Complete **");
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] ** Memory Allocation Complete **");
+    }
 }
 
 
@@ -46,15 +53,22 @@ cEgMemoryManager::~cEgMemoryManager()
 
 inline Allocator & cEgMemoryManager::getAllocator(MemoryPool lPool)
 {
+    if (!mFreeListAllocator)
+    {
+        Construct();
+    }
+
 	switch (lPool)
 	{
 	case CurrentPool:
 		return getAllocator(mCurrentPool);
 		break;
 	case List:
+        POW2_ASSERT_MSG(mFreeListAllocator, "Invalid allocator");
 		return *mFreeListAllocator;
 		break;
     case Renderer:
+        POW2_ASSERT_MSG(mRendererAllocator, "Invalid allocator");
         return *mRendererAllocator;
         break;
 	}

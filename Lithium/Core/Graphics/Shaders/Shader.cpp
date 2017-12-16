@@ -3,6 +3,30 @@
 #include "Game.h"
 #include "Core/Util/Util.h"
 
+void
+cEgShaderConstantBase::Destroy()
+{
+    SAFE_RELEASE(mpBuffer);
+}
+
+void
+cEgShaderConstantBase::ActivateInVS(
+    sUInt32 luIndexSlot ) const
+{
+    POW2_ASSERT(mpBuffer);
+    POW2_ASSERT(!mbDirty);
+    Game::GetInstance().mRenderManager.ctx->VSSetConstantBuffers(luIndexSlot, 1, &mpBuffer);
+}
+
+void
+cEgShaderConstantBase::ActivateInPS(
+    sUInt32 luIndexSlot ) const
+{
+    POW2_ASSERT(mpBuffer);
+    POW2_ASSERT(!mbDirty);
+    Game::GetInstance().mRenderManager.ctx->PSSetConstantBuffers(luIndexSlot, 1, &mpBuffer);
+}
+
 sBool 
 PixelShader::Compile(
     cTkString128Arg lacFileName,
@@ -113,7 +137,7 @@ VertexShader::Compile(
 void
 VertexShader::Activate()
 {
-    assert(mpVertexShader);
+    POW2_ASSERT(mpVertexShader);
     Game::GetInstance().mRenderManager.ctx->VSSetShader(mpVertexShader, NULL, 0);
 
     // Set the input layout

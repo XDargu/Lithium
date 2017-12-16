@@ -24,9 +24,12 @@ int APIENTRY WinMain(_In_ HINSTANCE	hInstance,_In_opt_ HINSTANCE hPrevInstance,_
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
+    gDebugConsole.Construct();
+    gDebugConsole.SetMinMessageLevel(cTkDebugConsole::eDebugConsoleMode::eDebugConsoleMode_Verbose);
+    gMemoryManager.Construct();
+
     Game& lGame = Game::GetInstance();
     
-    gDebugConsole.Construct();
 
 	// Initialize global strings
 	MyRegisterClass(hInstance);

@@ -26,3 +26,4 @@ using namespace DirectX;
 #include "Toolkit\Debugging\DebugConsole.h"
 #include "Toolkit\Debugging\Asserter.h"
 #include "Toolkit\Types\Types.h"
+#include "Toolkit\Graphics\RenderUtils.h"

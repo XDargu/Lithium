@@ -37,6 +37,12 @@
     <Filter Include="Toolkit\Types">
       <UniqueIdentifier>{a2c1baca-0c9e-4490-a764-abf9a40a4f13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Toolkit\Graphics">
+      <UniqueIdentifier>{2d933ae7-379b-47e4-9240-345c6ec61301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Graphics\Shaders\Constants">
+      <UniqueIdentifier>{539a94a7-8e1d-4588-8c2f-ae459fddd7e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -103,6 +109,15 @@
     <ClInclude Include="Core\Graphics\Mesh.h">
       <Filter>Core\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Toolkit\Graphics\RenderUtils.h">
+      <Filter>Toolkit\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Shaders\Constants\ShaderConstants.h">
+      <Filter>Core\Graphics\Shaders\Constants</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Graphics\Shaders\Constants\ShaderPlatform.h">
+      <Filter>Core\Graphics\Shaders\Constants</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
@@ -146,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="Core\Graphics\Mesh.cpp">
       <Filter>Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Toolkit\Graphics\RenderUtils.cpp">
+      <Filter>Toolkit\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

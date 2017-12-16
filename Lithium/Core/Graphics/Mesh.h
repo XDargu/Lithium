@@ -39,6 +39,8 @@ public:
     cEgMesh();
     ~cEgMesh();
 
+    TkVector<sInt32> maiIndices;
+
     sBool
     Create(
         sUInt32              luNumVertices,
@@ -78,11 +80,11 @@ public:
         const void *    lpNewCPUData,
         size_t          luNumBytesToUpdate);
 
-    void
-    cEgMesh::Activate() const;
+    static void
+    cEgMesh::Activate(cEgMesh& lMesh);
 
-    void
-    cEgMesh::Render() const;
+    static void
+    cEgMesh::Render(cEgMesh& lMesh);
 };
 
 #endif
