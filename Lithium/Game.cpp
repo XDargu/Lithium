@@ -5,6 +5,7 @@
 #include <vector>
 #include "Core\Memory\FreeListAllocator.h"
 #include "Core\Memory\MemoryManager.h"
+#include "Core\Globals\DebugGlobals.h"
 
 static Game gGame;
 
@@ -12,7 +13,6 @@ PixelShader     lPixelShader;
 VertexShader    lVertexShader;
 
 cEgMesh mTestMesh;
-cEgMesh mGridMesh;
 
 Game& Game::GetInstance()
 {
@@ -32,7 +32,7 @@ Game::Construct()
     render_constants::Construct();
     
     render_utils::CreateCube(mTestMesh, 1);
-    render_utils::CreateGrid(mGridMesh, 10);
+    render_utils::CreateGrid(gDebugGlobals.mGridMesh, 10);
 
     return lbSuccess;
 }
@@ -59,24 +59,25 @@ Game::Render()
     mRenderManager.ctx->ClearDepthStencilView(mRenderManager.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     // Initialize the view matrix
-    XMVECTOR Eye = XMVectorSet(5.0f * sin(t*0.5f), 2.0f + sin(t), 5.0f * cos(t*0.5f), 0.0f);
-    XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-    XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-    XMMATRIX g_View = XMMatrixLookAtRH(Eye, At, Up);
+    Vector3 lEye = Vector3(5.0f * sin(t*0.5f), 2.0f + sin(t), 5.0f * cos(t*0.5f));
+    Vector3 lAt = Vector3(0.0f, 1.0f, 0.0f);
+    Vector3 lUp = Vector3(0.0f, 1.0f, 0.0f);
+
+    Matrix lView = Matrix::CreateLookAt(lEye, lAt, lUp);
 
     // Initialize the projection matrix
-    XMMATRIX g_Projection = XMMatrixPerspectiveFovRH(XM_PIDIV2, mRenderManager.xres / (FLOAT)mRenderManager.yres, 0.01f, 100.0f);
+    Matrix lProjection = Matrix::CreatePerspectiveFieldOfView(XM_PIDIV2, mRenderManager.xres / (FLOAT)mRenderManager.yres, 0.01f, 100.0f);
 
     render_constants::ActivateConstantBuffer(0);
 
-    render_constants::SetViewProjection(g_View, g_Projection);
+    render_constants::SetViewProjection(lView, lProjection);
 
     // Initialize the world matrix
-    XMMATRIX g_World1 = XMMatrixIdentity();
+    Matrix lWorld1 = Matrix::Identity;
 
-    g_World1 = XMMatrixRotationY(-t);
+    lWorld1 = XMMatrixRotationY(-t);
     
-    render_constants::SetWorldMatrix(g_World1);
+    render_constants::SetWorldMatrix(lWorld1);
 
     //
     // Render the first cube
@@ -88,14 +89,14 @@ Game::Render()
     cEgMesh::Render(mTestMesh);
 
     // 
-    g_World1 = XMMatrixIdentity();
-    render_constants::SetWorldMatrix(g_World1);
+    lWorld1 = Matrix::Identity;
+    render_constants::SetWorldMatrix(lWorld1);
 
     //
     // Render the grid
     //
-    cEgMesh::Activate(mGridMesh);
-    cEgMesh::Render(mGridMesh);
+    cEgMesh::Activate(gDebugGlobals.mGridMesh);
+    cEgMesh::Render(gDebugGlobals.mGridMesh);
 
     // Present the information rendered to the back buffer to the front buffer (the screen)
     mRenderManager.swap_chain->Present(0, 0);

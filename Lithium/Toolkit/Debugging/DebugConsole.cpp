@@ -86,6 +86,8 @@ cTkDebugConsole::Construct()
     SetConsoleTextAttribute(mConsoleHandle, ConsoleTypeColour::TYPE_INFO);
 
     SetConsoleSize(150, 60);
+
+    gDebugConsole.WriteSimpleInfo("[Debug Console] Debug Console Loaded");
 }
 
 void
@@ -161,7 +163,7 @@ void cTkDebugConsole::SetConsoleSize(
         }
     }
 
-    COORD size = { liWidth, liHeight };
+    COORD size = { liWidth, liHeight * 10 };
     if (!SetConsoleScreenBufferSize(mConsoleHandle, size))
     {
         Write(eDebugConsoleType_Error, eDebugConsoleMode_Normal, "[Debug Console] Error resizing: unable to resize screen buffer");

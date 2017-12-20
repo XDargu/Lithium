@@ -8,7 +8,8 @@
 sBool 
 render_utils::CreateGrid(
     cEgMesh& lMesh, 
-    sInt32 liNumSamples) {
+    sInt32 liNumSamples)
+{
 
     TkVector< EgVertexPosColor > laVertices;
 
@@ -44,7 +45,8 @@ render_utils::CreateGrid(
 sBool
 render_utils::CreateCube(
     cEgMesh& lMesh, 
-    sFloat32 lfSize) {
+    sFloat32 lfSize) 
+{
 
     TkVector< EgVertexPosColor > laVertices;
     laVertices.resize(8);
@@ -94,12 +96,14 @@ namespace render_constants
     void
     Construct()
     {
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Render Constants] Creating Render Constants");
         gConstantBuffer.Create();
     }
 
     void
     Release()
     {
+        gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Render Constants] Raleasing Render Constants");
         gConstantBuffer.Destroy();
     }
 

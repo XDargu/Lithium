@@ -75,8 +75,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x64;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <LibraryPath>$(LibraryPath);$(DXSDK_DIR)Lib\x64;</LibraryPath>
     <ExcludePath>$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -85,8 +85,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <ExecutablePath>$(DXSDK_DIR)Utilities\bin\x64;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)Lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <LibraryPath>$$(LibraryPath);$(DXSDK_DIR)Lib\x64;</LibraryPath>
     <ExcludePath>$(ExcludePath)</ExcludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -169,6 +169,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DirectXTK\SimpleMath.h" />
+    <ClInclude Include="Toolkit\Debugging\StackWalker.h" />
     <ClInclude Include="Core\Graphics\Mesh.h" />
     <ClInclude Include="Core\Graphics\Shaders\Constants\ShaderConstants.h" />
     <ClInclude Include="Core\Graphics\Shaders\Constants\ShaderPlatform.h" />
@@ -178,6 +180,7 @@
     <ClInclude Include="Core\Memory\StackAllocator.h" />
     <ClInclude Include="Core\Memory\FreeListAllocator.h" />
     <ClInclude Include="Core\Memory\ProxyAllocator.h" />
+    <ClInclude Include="Core\Globals\DebugGlobals.h" />
     <ClInclude Include="Toolkit\Graphics\RenderUtils.h" />
     <ClInclude Include="Toolkit\Debugging\Asserter.h" />
     <ClInclude Include="Core\Graphics\Shaders\Shader.h" />
@@ -197,6 +200,9 @@
     <ClInclude Include="Toolkit\Types\Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Globals\DebugGlobals.cpp" />
+    <ClCompile Include="DirectXTK\SimpleMath.cpp" />
+    <ClCompile Include="Toolkit\Debugging\StackWalker.cpp" />
     <ClCompile Include="Core\Graphics\Mesh.cpp" />
     <ClCompile Include="Core\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Memory\LinearAllocator.cpp" />
@@ -222,6 +228,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectXTK\SimpleMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

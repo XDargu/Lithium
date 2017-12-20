@@ -39,7 +39,7 @@ public:
     sBool
     Create()
     {
-        POW2_ASSERT(mpBuffer == nullptr);
+        XASSERT(mpBuffer == nullptr);
 
         // Create the constant buffer
         D3D11_BUFFER_DESC bd;
@@ -66,7 +66,7 @@ public:
     void 
     UploadToGPU()
     {
-        POW2_ASSERT(mpBuffer);
+        XASSERT(mpBuffer);
 
         mbDirty = FALSE;
         const TParams *obj = &mParams;

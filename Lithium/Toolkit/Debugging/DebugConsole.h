@@ -33,6 +33,12 @@ public:
     );
 
     void
+    WriteSimpleInfo(const char* lText)
+    {
+        Write(eDebugConsoleType_Info, eDebugConsoleMode_Normal, lText);
+    }
+
+    void
     SetMinMessageLevel(eDebugConsoleMode eMessageLevel)
     {
         meConsoleMode = eMessageLevel;

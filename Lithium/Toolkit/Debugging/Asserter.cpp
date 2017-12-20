@@ -10,8 +10,7 @@
 #include <string>
 
 #include "Resources\resource.h"
-
-
+#include "StackWalker.h"
 
 struct IngoreTableEntry
 {
@@ -55,13 +54,29 @@ struct AssertParam
 
     std::string GetText()
     {
-        std::string mText8 = "ASSERT: " + std::string(macMessage) + "\r\nLine: " + std::to_string(macLine) + "\r\nFile: " + std::string(macFile);
+        std::string mText8 = "ASSERT: " + (macMessage ? std::string(macMessage) : "") + "\r\nLine: " + std::to_string(macLine) + "\r\nFile: " + std::string(macFile);
+        return mText8;
+    }
+
+    std::string GetCallstackText()
+    {
+        std::string mText8 = "ASSERT: " + (macMessage ? std::string(macMessage) : "") + "\r\nLine: " + std::to_string(macLine) + "\r\nFile: " + std::string(macFile);
         return mText8;
     }
 
     std::wstring GetWText()
     {
         std::string mText8 = GetText();
+
+        std::wstring mText = std::wstring(mText8.length(), L' '); // Make room for characters
+        std::copy(mText8.begin(), mText8.end(), mText.begin());
+
+        return mText;
+    }
+
+    std::wstring GetWCallstackText()
+    {
+        std::string mText8 = GetCallstackText();
 
         std::wstring mText = std::wstring(mText8.length(), L' '); // Make room for characters
         std::copy(mText8.begin(), mText8.end(), mText.begin());
@@ -122,7 +137,7 @@ INT_PTR CALLBACK DialogProc(
     return FALSE;
 }
 
-namespace pow2
+namespace xassert
 {
     namespace
     {    
@@ -147,6 +162,8 @@ namespace pow2
                 LPARAM lParam = (LPARAM)&lAssertParam;
 
                 gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Error, cTkDebugConsole::eDebugConsoleMode_Critical, lAssertParam.GetText().c_str());
+
+                //stack_trace();
 
                 HWND hDlg = CreateDialogParamW(
                     GetModuleHandle(0),

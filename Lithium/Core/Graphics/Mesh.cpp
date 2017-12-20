@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Mesh.h"
 #include "Game.h"
-
+#include "Core\Globals\DebugGlobals.h"
 
 cEgMesh::cEgMesh()
     : mVertexBuffer(nullptr)
@@ -26,13 +26,13 @@ cEgMesh::Create(
     const cEgVertexDecl* lVertexDecl, 
     sBool                lbMutable)
 {
-    POW2_ASSERT_MSG(mVertexBuffer == nullptr, "Mesh already created");
+    XASSERT_MSG(mVertexBuffer == nullptr, "Mesh already created");
 
     // Check Data
-    POW2_ASSERT_MSG(luNumVertices > 0, "Invalid num vertices for mesh creation");
-    POW2_ASSERT_MSG(lpVertices != nullptr, "Invalid vertices for mesh creation");
-    POW2_ASSERT_MSG(lVertexDecl != nullptr, "Invalid vertex declaration for mesh creation");
-    POW2_ASSERT_MSG(lVertexDecl->muBytesPerVertex > 0, "Invalid vertex declaration bytes format for mesh creation");
+    XASSERT_MSG(luNumVertices > 0, "Invalid num vertices for mesh creation");
+    XASSERT_MSG(lpVertices != nullptr, "Invalid vertices for mesh creation");
+    XASSERT_MSG(lVertexDecl != nullptr, "Invalid vertex declaration for mesh creation");
+    XASSERT_MSG(lVertexDecl->muBytesPerVertex > 0, "Invalid vertex declaration bytes format for mesh creation");
 
     muNumVertices = luNumVertices;
     muNumIndices = luNumIndices;
@@ -44,7 +44,7 @@ cEgMesh::Create(
         case TRIANGLE_LIST:  mTopology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST; break;
         case TRIANGLE_STRIP: mTopology = D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP; break;
         default:
-            POW2_ASSERT_FAIL("Primitive_type %d is not valid", lePrimitiveType);
+            XASSERT_FAIL("Primitive_type %d is not valid", lePrimitiveType);
     }
 
     // Create the VB
@@ -70,7 +70,7 @@ cEgMesh::Create(
 
     // Create the Index Buffer if the user gives us indices
     if (lpIndices) {
-        POW2_ASSERT_MSG(muNumIndices > 0, "Invalid num indices for mesh creation");
+        XASSERT_MSG(muNumIndices > 0, "Invalid num indices for mesh creation");
 
         bd.Usage = D3D11_USAGE_DEFAULT;
         bd.ByteWidth = sizeof(TIndex) * muNumIndices;
@@ -82,7 +82,7 @@ cEgMesh::Create(
             return false;
     }
     else {
-        POW2_ASSERT_MSG(muNumIndices == 0, "Number of indices must be 0 in mesh creation if no indices are provided");
+        XASSERT_MSG(muNumIndices == 0, "Number of indices must be 0 in mesh creation if no indices are provided");
     }
 
     return TRUE;
@@ -97,7 +97,7 @@ cEgMesh::UpdateFromCPU(
     if (luNumBytesToUpdate == 0)
         luNumBytesToUpdate = muNumVertices * mVertexDecl->muBytesPerVertex;
     
-    POW2_ASSERT_MSG(mVertexBuffer, "Invalid vertex buffer");
+    XASSERT_MSG(mVertexBuffer, "Invalid vertex buffer");
 
     D3D11_MAPPED_SUBRESOURCE lMappedResource;
 
@@ -109,8 +109,8 @@ cEgMesh::UpdateFromCPU(
         0,
         &lMappedResource);
 
-    POW2_ASSERT(hr == D3D_OK);
-    POW2_ASSERT(luNumBytesToUpdate <= mVertexDecl->muBytesPerVertex * muNumVertices);
+    XASSERT(hr == D3D_OK);
+    XASSERT(luNumBytesToUpdate <= mVertexDecl->muBytesPerVertex * muNumVertices);
 
     // Copy from CPU to GPU
     memcpy(lMappedResource.pData, lpNewCPUData, luNumBytesToUpdate);
@@ -123,7 +123,7 @@ cEgMesh::UpdateFromCPU(
 void
 cEgMesh::Activate(cEgMesh& lMesh)
 {
-    POW2_ASSERT_MSG(lMesh.mVertexBuffer, "Error loading vertex buffer");
+    XASSERT_MSG(lMesh.mVertexBuffer, "Error loading vertex buffer");
 
     // Activate the vertex buffer
     UINT stride = lMesh.mVertexDecl->muBytesPerVertex;
@@ -131,11 +131,11 @@ cEgMesh::Activate(cEgMesh& lMesh)
     Game::GetInstance().mRenderManager.ctx->IASetVertexBuffers(0, 1, &lMesh.mVertexBuffer, &stride, &offset);
 
     // Set primitive topology (LINES,POINTS,..)
-//#ifdef _DEBUG
-    //Game::GetInstance().mRenderManager.ctx->IASetPrimitiveTopology(mTopology == D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ? D3D10_PRIMITIVE_TOPOLOGY_LINELIST : mTopology);
-//#else
+#ifdef _DEBUG
+    Game::GetInstance().mRenderManager.ctx->IASetPrimitiveTopology(gDebugGlobals.mbDebugWireframe && lMesh.mTopology == D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST ? D3D10_PRIMITIVE_TOPOLOGY_LINELIST : lMesh.mTopology);
+#else
     Game::GetInstance().mRenderManager.ctx->IASetPrimitiveTopology(lMesh.mTopology);
-//#endif
+#endif
 
     // Set index buffer
     if (lMesh.mIndexBuffer)
@@ -150,7 +150,7 @@ cEgMesh::Render(cEgMesh& lMesh)
 {
     //POW2_ASSERT(current_active_mesh == this);  // Did you forget to activate this mesh?
 
-    POW2_ASSERT(lMesh.mVertexBuffer);
+    XASSERT(lMesh.mVertexBuffer);
     if (lMesh.mIndexBuffer)
         Game::GetInstance().mRenderManager.ctx->DrawIndexed(lMesh.muNumIndices, 0, 0);
     else

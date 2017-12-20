@@ -43,6 +43,12 @@
     <Filter Include="Core\Graphics\Shaders\Constants">
       <UniqueIdentifier>{539a94a7-8e1d-4588-8c2f-ae459fddd7e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Globals">
+      <UniqueIdentifier>{3ed31229-501f-4372-b89f-07d38153dd19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DirectXTK">
+      <UniqueIdentifier>{479330c8-d50b-4a7d-8d94-52aa62f7cb52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -118,6 +124,15 @@
     <ClInclude Include="Core\Graphics\Shaders\Constants\ShaderPlatform.h">
       <Filter>Core\Graphics\Shaders\Constants</Filter>
     </ClInclude>
+    <ClInclude Include="Core\Globals\DebugGlobals.h">
+      <Filter>Core\Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="Toolkit\Debugging\StackWalker.h">
+      <Filter>Toolkit\Debugging</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXTK\SimpleMath.h">
+      <Filter>DirectXTK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Memory\MemoryManager.cpp">
@@ -165,8 +180,22 @@
     <ClCompile Include="Toolkit\Graphics\RenderUtils.cpp">
       <Filter>Toolkit\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Globals\DebugGlobals.cpp">
+      <Filter>Core\Globals</Filter>
+    </ClCompile>
+    <ClCompile Include="Toolkit\Debugging\StackWalker.cpp">
+      <Filter>Toolkit\Debugging</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXTK\SimpleMath.cpp">
+      <Filter>DirectXTK</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Resources.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectXTK\SimpleMath.inl">
+      <Filter>DirectXTK</Filter>
+    </None>
   </ItemGroup>
 </Project>

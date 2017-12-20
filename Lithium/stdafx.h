@@ -4,7 +4,6 @@
 //
 
 #pragma once
-
 #include "targetver.h"
 
 #include <stdio.h>
@@ -15,6 +14,8 @@
 
 // C++
 #include <assert.h>
+
+
 
 // XNA
 #include <DirectXMath.h>
@@ -27,3 +28,6 @@ using namespace DirectX;
 #include "Toolkit\Debugging\Asserter.h"
 #include "Toolkit\Types\Types.h"
 #include "Toolkit\Graphics\RenderUtils.h"
+#include "DirectXTK\SimpleMath.h"
+
+using namespace SimpleMath;

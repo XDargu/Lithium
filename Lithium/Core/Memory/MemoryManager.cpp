@@ -29,7 +29,7 @@ cEgMemoryManager::Construct()
         gDebugConsole.Write(cTkDebugConsole::eDebugConsoleType_Info, cTkDebugConsole::eDebugConsoleMode_Normal, "[Memory Manager] Allocating Rendering Memory");
         mRendererAllocator = custom_allocator::AllocateNew<ProxyAllocator>(*mFreeListAllocator, *mFreeListAllocator);
 
-        POW2_ASSERT_MSG(mRendererAllocator != nullptr, "Error creating Renderer Allocator");
+        XASSERT_MSG(mRendererAllocator != nullptr, "Error creating Renderer Allocator");
 
         SetCurrentPool(List);
 
@@ -64,11 +64,11 @@ inline Allocator & cEgMemoryManager::getAllocator(MemoryPool lPool)
 		return getAllocator(mCurrentPool);
 		break;
 	case List:
-        POW2_ASSERT_MSG(mFreeListAllocator, "Invalid allocator");
+        XASSERT_MSG(mFreeListAllocator, "Invalid allocator");
 		return *mFreeListAllocator;
 		break;
     case Renderer:
-        POW2_ASSERT_MSG(mRendererAllocator, "Invalid allocator");
+        XASSERT_MSG(mRendererAllocator, "Invalid allocator");
         return *mRendererAllocator;
         break;
 	}

@@ -1,9 +1,9 @@
 #ifndef _ASSERTER_H
 #define _ASSERTER_H
 
-#define POW2_ASSERTS_ENABLED
+#define XASSERTS_ENABLED
 
-namespace pow2 {
+namespace xassert {
     namespace Assert
     {
         enum FailBehavior
@@ -27,42 +27,42 @@ namespace pow2 {
     }
 }
 
-#define POW2_HALT() __debugbreak()
-#define POW2_UNUSED(x) do { (void)sizeof(x); } while(0)
+#define XHALT() __debugbreak()
+#define XUNUSED(x) do { (void)sizeof(x); } while(0)
 
-#ifdef POW2_ASSERTS_ENABLED
-#define POW2_ASSERT(cond) \
+#ifdef XASSERTS_ENABLED
+#define XASSERT(cond) \
 		do \
 		{ \
 			if (!(cond)) \
 			{ \
-				if (pow2::Assert::ReportFailure(#cond, __FILE__, __LINE__, 0) == \
-					pow2::Assert::Halt) \
-					POW2_HALT(); \
+				if (xassert::Assert::ReportFailure(#cond, __FILE__, __LINE__, 0) == \
+					xassert::Assert::Halt) \
+					XHALT(); \
 			} \
 		} while(0)
 
-#define POW2_ASSERT_MSG(cond, msg, ...) \
+#define XASSERT_MSG(cond, msg, ...) \
 		do \
 		{ \
 			if (!(cond)) \
 			{ \
-				if (pow2::Assert::ReportFailure(#cond, __FILE__, __LINE__, (msg), __VA_ARGS__) == \
-					pow2::Assert::Halt) \
-					POW2_HALT(); \
+				if (xassert::Assert::ReportFailure(#cond, __FILE__, __LINE__, (msg), __VA_ARGS__) == \
+					xassert::Assert::Halt) \
+					XHALT(); \
 			} \
 		} while(0)
 
-#define POW2_ASSERT_FAIL(msg, ...) \
+#define XASSERT_FAIL(msg, ...) \
 		do \
 		{ \
-			if (pow2::Assert::ReportFailure(0, __FILE__, __LINE__, (msg), __VA_ARGS__) == \
-				pow2::Assert::Halt) \
-			POW2_HALT(); \
+			if (xassert::Assert::ReportFailure(0, __FILE__, __LINE__, (msg), __VA_ARGS__) == \
+				xassert::Assert::Halt) \
+			XHALT(); \
 		} while(0)
 
-#define POW2_VERIFY(cond) POW2_ASSERT(cond)
-#define POW2_VERIFY_MSG(cond, msg, ...) POW2_ASSERT_MSG(cond, msg, ##__VA_ARGS__)
+#define XVERIFY(cond) XASSERT(cond)
+#define XVERIFY_MSG(cond, msg, ...) XASSERT_MSG(cond, msg, ##__VA_ARGS__)
 #else
 #define POW2_ASSERT(condition) \
 		do { POW2_UNUSED(condition); } while(0)
@@ -75,10 +75,10 @@ namespace pow2 {
 		do { (void)(cond); POW2_UNUSED(msg); } while(0)
 #endif
 
-#define POW2_STATIC_ASSERT(x) \
-	typedef char pow2StaticAssert[(x) ? 1 : -1];
+#define XSTATIC_ASSERT(x) \
+	typedef char XStaticAssert[(x) ? 1 : -1];
 
-//lint -esym(751,pow2StaticAssert)
-//lint -esym(751,pow2::pow2StaticAssert)
+//lint -esym(751,XStaticAssert)
+//lint -esym(751,xassert::XStaticAssert)
 
 #endif

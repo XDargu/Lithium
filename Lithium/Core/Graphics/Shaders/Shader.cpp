@@ -13,8 +13,8 @@ void
 cEgShaderConstantBase::ActivateInVS(
     sUInt32 luIndexSlot ) const
 {
-    POW2_ASSERT(mpBuffer);
-    POW2_ASSERT(!mbDirty);
+    XASSERT(mpBuffer);
+    XASSERT(!mbDirty);
     Game::GetInstance().mRenderManager.ctx->VSSetConstantBuffers(luIndexSlot, 1, &mpBuffer);
 }
 
@@ -22,8 +22,8 @@ void
 cEgShaderConstantBase::ActivateInPS(
     sUInt32 luIndexSlot ) const
 {
-    POW2_ASSERT(mpBuffer);
-    POW2_ASSERT(!mbDirty);
+    XASSERT(mpBuffer);
+    XASSERT(!mbDirty);
     Game::GetInstance().mRenderManager.ctx->PSSetConstantBuffers(luIndexSlot, 1, &mpBuffer);
 }
 
@@ -137,7 +137,7 @@ VertexShader::Compile(
 void
 VertexShader::Activate()
 {
-    POW2_ASSERT(mpVertexShader);
+    XASSERT(mpVertexShader);
     Game::GetInstance().mRenderManager.ctx->VSSetShader(mpVertexShader, NULL, 0);
 
     // Set the input layout
