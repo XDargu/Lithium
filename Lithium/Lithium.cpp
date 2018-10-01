@@ -7,6 +7,9 @@
 #pragma warning( push )
 
 #include "Game.h"
+#include "ImGui\imgui.h"
+#include "ImGui\imgui_impl_dx11.h"
+#include "ImGui\imgui_impl_win32.h"
 
 
 // Global Variables:
@@ -44,6 +47,15 @@ int APIENTRY WinMain(_In_ HINSTANCE	hInstance,_In_opt_ HINSTANCE hPrevInstance,_
 		return FALSE;
 	}
 
+    // Setup Dear ImGui binding
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+        
+    ImGui_ImplWin32_Init(GetActiveWindow());
+    ImGui_ImplDX11_Init(Game::GetInstance().mRenderManager.device, Game::GetInstance().mRenderManager.ctx);
+    ImGui::StyleColorsDark();
+
 	// Main message loop:
 	MSG msg;
 	memset(&msg, 0, sizeof(MSG));
@@ -54,9 +66,19 @@ int APIENTRY WinMain(_In_ HINSTANCE	hInstance,_In_opt_ HINSTANCE hPrevInstance,_
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
+        
+        // Start the Dear ImGui frame
+        ImGui_ImplDX11_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+
 		lGame.Update();
 		lGame.Render();
 	}
+
+    ImGui_ImplDX11_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
 
 	lGame.Release();
 	return (int)msg.wParam;
@@ -168,6 +190,8 @@ InitInstance(
 	return TRUE;
 }
 
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -185,6 +209,9 @@ WndProc(
 	WPARAM	wParam, 
 	LPARAM	lParam )
 {
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+        return true;
+
 	PAINTSTRUCT ps;
 	HDC hdc;
 
