@@ -30,7 +30,7 @@ public:
 
     float GetLength()
     {
-        return sqrt(x*x + y*y + z*z);
+        return (float)sqrt(x*x + y*y + z*z);
     }
 
     static float Dot(const Vec3f& v1, const Vec3f& v2)
@@ -125,7 +125,7 @@ Game::Render()
     mRenderManager.ctx->ClearDepthStencilView(mRenderManager.depth_stencil_view, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     // Initialize the view matrix
-    Vector3 lEye = Vector3(5.0f * sin(t*0.5f), 2.0f + sin(t), 5.0f * cos(t*0.5f));
+    Vector3 lEye = Vector3(5.0f * (float)sin(t*0.5f), 2.0f + (float)sin(t), 5.0f * (float)cos(t*0.5f));
     Vector3 lAt = Vector3(0.0f, 1.0f, 0.0f);
     Vector3 lUp = Vector3(0.0f, 1.0f, 0.0f);
 

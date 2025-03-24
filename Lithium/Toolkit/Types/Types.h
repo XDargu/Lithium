@@ -41,10 +41,10 @@ namespace cTkString
 }
 
 template <class T, cEgMemoryManager::MemoryPool Pool = cEgMemoryManager::CurrentPool>
-using TkVector = std::vector<T, CustomAllocator<T, Pool>>;
+using TkVector = std::vector<T>;
 
 template <class Key, class T, cEgMemoryManager::MemoryPool Pool = cEgMemoryManager::CurrentPool>
-using TkMap = std::map<Key, T, std::less<Key>, CustomAllocator<T, Pool>>;
+using TkMap = std::map<Key, T, std::less<Key>>;
 
 
 

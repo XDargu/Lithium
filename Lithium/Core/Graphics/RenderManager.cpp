@@ -231,8 +231,10 @@ cEgRenderManager::CompileShaderFromFile(
     while (true) 
     {
         ID3DBlob* pErrorBlob = nullptr;
-        hr = D3DX11CompileFromFile(wFilename, NULL, NULL, lacEntryPoint.GetString(), lacShaderModel.GetString(),
-            dwShaderFlags, 0, NULL, lppBlobOut, &pErrorBlob, NULL);
+        ID3DInclude* pIncludeHandler = D3D_COMPILE_STANDARD_FILE_INCLUDE;
+
+        hr = D3DCompileFromFile(wFilename, NULL, pIncludeHandler, lacEntryPoint.GetString(), lacShaderModel.GetString(),
+            dwShaderFlags, 0, lppBlobOut, &pErrorBlob);
 
         if (pErrorBlob) 
         {

@@ -7,7 +7,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <D3Dcommon.h>
-#include <d3dx11.h>
+#include <d3d11.h>
 #include <d3d9.h>         // D3DPERF_*
 #pragma warning( pop )
 
